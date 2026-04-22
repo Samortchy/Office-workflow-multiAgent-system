@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AWOM — <%= title %></title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Syne:wght@700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['DM Sans', 'system-ui', 'sans-serif'],
+            display: ['Syne', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'Courier New', 'monospace'],
+          },
+          colors: {
+            navy: {
+              950: '#0a1120',
+              900: '#0c1628',
+              800: '#0f1d35',
+              700: '#1a2744',
+              600: '#1e2f4a',
+              500: '#243147',
+            },
+          },
+          keyframes: {
+            slideInRight: { from: { transform: 'translateX(100%)' }, to: { transform: 'translateX(0)' } },
+            fadeUp: { from: { opacity: '0', transform: 'translateY(8px)' }, to: { opacity: '1', transform: 'translateY(0)' } },
+          },
+          animation: {
+            'slide-in-right': 'slideInRight 0.3s ease-out',
+            'fade-up': 'fadeUp 0.35s ease-out',
+          },
+        },
+      },
+    };
+  </script>
+  <link rel="stylesheet" href="/css/app.css" />
+</head>
+<body>
+<div class="flex min-h-screen">
+
+  <!-- Sidebar -->
+  <aside class="fixed left-0 top-0 bottom-0 w-52 bg-navy-950 border-r border-[rgba(148,163,184,0.07)] flex flex-col z-30">
+
+    <!-- Wordmark -->
+    <div class="px-4 py-4 border-b border-[rgba(148,163,184,0.07)]">
+      <div class="flex items-center gap-2.5">
+        <div class="w-7 h-7 rounded-md bg-cyan-500/10 border border-cyan-500/25 flex items-center justify-center flex-shrink-0">
+          <div class="w-2 h-2 rounded-sm bg-cyan-400"></div>
+        </div>
+        <div>
+          <div class="text-white text-sm font-semibold tracking-wide" style="font-family:Syne,sans-serif">AWOM</div>
+          <div class="text-[9px] font-mono text-slate-600 tracking-widest mt-px">WORKFLOW OPS</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Nav -->
+    <nav class="flex-1 p-2.5 space-y-0.5">
+
+      <a href="/" class="nav-link flex items-center gap-2.5 px-3 py-2 rounded-md text-sm transition-all duration-150 border <%= page === 'dashboard' ? 'bg-cyan-500/10 text-cyan-400 border-cyan-900/50' : 'text-slate-500 hover:text-slate-300 hover:bg-white/[0.04] border-transparent' %>">
+        <svg viewBox="0 0 20 20" fill="none" class="w-4 h-4 flex-shrink-0" stroke="currentColor" stroke-width="1.5">
+          <rect x="2" y="5" width="4" height="10" rx="1"/>
+          <rect x="8" y="7" width="4" height="8" rx="1"/>
+          <rect x="14" y="3" width="4" height="12" rx="1"/>
+          <path d="M6 10h2M12 11h2" stroke-linecap="round"/>
+        </svg>
+        <span class="font-medium text-[13px]">Pipeline Monitor</span>
+      </a>
+
+      <a href="/inbox" class="nav-link flex items-center gap-2.5 px-3 py-2 rounded-md text-sm transition-all duration-150 border <%= page === 'inbox' ? 'bg-cyan-500/10 text-cyan-400 border-cyan-900/50' : 'text-slate-500 hover:text-slate-300 hover:bg-white/[0.04] border-transparent' %>">
+        <svg viewBox="0 0 20 20" fill="none" class="w-4 h-4 flex-shrink-0" stroke="currentColor" stroke-width="1.5">
+          <path d="M2 13l3-7h10l3 7v4H2v-4z"/>
+          <path d="M7 13h6M10 2v6M7 5l3 3 3-3" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="font-medium text-[13px]">Inbox</span>
+      </a>
+
+      <a href="/queue" class="nav-link flex items-center gap-2.5 px-3 py-2 rounded-md text-sm transition-all duration-150 border <%= page === 'queue' ? 'bg-cyan-500/10 text-cyan-400 border-cyan-900/50' : 'text-slate-500 hover:text-slate-300 hover:bg-white/[0.04] border-transparent' %>">
+        <svg viewBox="0 0 20 20" fill="none" class="w-4 h-4 flex-shrink-0" stroke="currentColor" stroke-width="1.5">
+          <path d="M3 5h14M3 10h10M3 15h7" stroke-linecap="round"/>
+          <circle cx="16" cy="13" r="3"/>
+          <path d="M16 11.5v1.5l1 1" stroke-linecap="round"/>
+        </svg>
+        <span class="font-medium text-[13px]">Queue</span>
+      </a>
+
+    </nav>
+
+    <!-- Status footer -->
+    <div class="px-4 py-3 border-t border-[rgba(148,163,184,0.07)]">
+      <div class="flex items-center gap-2 mb-1">
+        <span class="relative flex h-1.5 w-1.5">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-60"></span>
+          <span class="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400"></span>
+        </span>
+        <span class="text-[9px] font-mono text-slate-600 tracking-widest">PIPELINE LIVE</span>
+      </div>
+      <div class="text-[9px] font-mono text-slate-700">3 agents active · v2.1</div>
+    </div>
+
+  </aside>
+
+  <!-- Main content -->
+  <main class="flex-1 ml-52 min-h-screen">

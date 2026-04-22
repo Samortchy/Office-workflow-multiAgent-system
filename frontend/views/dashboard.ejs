@@ -1,0 +1,46 @@
+<% var title = 'Pipeline Monitor'; %>
+<%- include('partials/header') %>
+
+<div class="min-h-screen flex flex-col">
+
+  <!-- Stats bar -->
+  <div id="stats-bar" class="border-b border-[rgba(148,163,184,0.08)] bg-navy-900" style="min-height:56px"></div>
+
+  <div class="flex-1 p-6">
+
+    <!-- Page header + sort -->
+    <div class="flex items-start justify-between mb-5">
+      <div>
+        <h1 class="heading-display text-xl text-white">Pipeline Monitor</h1>
+        <p id="envelope-meta" class="text-xs text-slate-500 font-mono mt-1">— envelopes · polling every 5s</p>
+      </div>
+      <div class="flex items-center gap-1">
+        <span class="text-[10px] font-mono text-slate-600 mr-1">SORT</span>
+        <button data-sort="newest"     class="sort-btn active-sort text-[10px] font-mono px-2 py-1 rounded transition-all">NEWEST</button>
+        <button data-sort="priority"   class="sort-btn text-[10px] font-mono px-2 py-1 rounded transition-all">PRIORITY</button>
+        <button data-sort="department" class="sort-btn text-[10px] font-mono px-2 py-1 rounded transition-all">DEPT</button>
+      </div>
+    </div>
+
+    <!-- Filter pills -->
+    <div class="flex items-center gap-1.5 mb-5 flex-wrap">
+      <button data-filter="all"        class="filter-btn active-filter text-[10px] font-mono px-2.5 py-1 rounded-full border transition-all">ALL</button>
+      <button data-filter="IT"         class="filter-btn text-[10px] font-mono px-2.5 py-1 rounded-full border transition-all">IT</button>
+      <button data-filter="HR"         class="filter-btn text-[10px] font-mono px-2.5 py-1 rounded-full border transition-all">HR</button>
+      <button data-filter="Finance"    class="filter-btn text-[10px] font-mono px-2.5 py-1 rounded-full border transition-all">FIN</button>
+      <button data-filter="autonomous" class="filter-btn text-[10px] font-mono px-2.5 py-1 rounded-full border transition-all">AUTO</button>
+      <button data-filter="review"     class="filter-btn text-[10px] font-mono px-2.5 py-1 rounded-full border transition-all">REVIEW</button>
+      <span id="shown-count" class="text-slate-700 text-[10px] font-mono ml-1"></span>
+    </div>
+
+    <!-- Cards grid -->
+    <div id="cards-grid" class="grid grid-cols-1 lg:grid-cols-2 gap-3"></div>
+
+  </div>
+</div>
+
+<script>window.INITIAL_ENVELOPES = <%- JSON.stringify(envelopes) %>;</script>
+<%- include('partials/footer') %>
+<script src="/js/dashboard.js"></script>
+</body>
+</html>

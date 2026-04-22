@@ -1,0 +1,143 @@
+<% var title = 'Inbox'; %>
+<%- include('partials/header') %>
+
+<div class="min-h-screen p-6">
+
+  <div class="mb-6">
+    <h1 class="heading-display text-xl text-white">Inbox</h1>
+    <p class="text-xs text-slate-500 font-mono mt-1">Submit raw employee requests to run through the 3-agent pipeline</p>
+  </div>
+
+  <div class="max-w-2xl">
+
+    <!-- Pipeline explanation strip -->
+    <div class="mb-5 p-3 rounded-lg border border-[rgba(148,163,184,0.07)] bg-navy-800 flex items-center gap-4">
+      <div class="flex flex-col gap-0.5 flex-1">
+        <span class="text-[10px] font-mono font-semibold text-slate-400">Intake Agent</span>
+        <span class="text-[9px] font-mono text-slate-600">Classifies department &amp; autonomy</span>
+      </div>
+      <span class="text-slate-700 text-xs font-mono">→</span>
+      <div class="flex flex-col gap-0.5 flex-1">
+        <span class="text-[10px] font-mono font-semibold text-sky-400">Task Agent</span>
+        <span class="text-[9px] font-mono text-slate-600">Structures the request</span>
+      </div>
+      <span class="text-slate-700 text-xs font-mono">→</span>
+      <div class="flex flex-col gap-0.5 flex-1">
+        <span class="text-[10px] font-mono font-semibold text-amber-400">Priority Agent</span>
+        <span class="text-[9px] font-mono text-slate-600">Scores 1–4 severity</span>
+      </div>
+    </div>
+
+    <!-- Submit form -->
+    <div class="card p-5">
+      <form id="pipeline-form" class="space-y-4">
+
+        <div class="relative">
+          <div class="text-[9px] font-mono text-slate-600 tracking-widest mb-1.5">RAW EMPLOYEE REQUEST</div>
+          <textarea
+            id="request-text"
+            rows="6"
+            placeholder="Paste or type the employee's request exactly as received…"
+            class="w-full bg-navy-800 border border-[rgba(148,163,184,0.12)] rounded-lg px-4 py-3 text-sm text-slate-200 placeholder-slate-600 font-sans leading-relaxed resize-none focus:outline-none focus:border-cyan-700 transition-all"
+          ></textarea>
+          <div id="char-count" class="absolute bottom-3 right-3 text-[9px] font-mono text-slate-700">0</div>
+        </div>
+
+        <button
+          type="submit"
+          id="submit-btn"
+          class="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-lg bg-cyan-600/20 border border-cyan-700/50 text-cyan-300 font-mono text-sm font-semibold tracking-wide hover:bg-cyan-600/30 hover:border-cyan-600/70 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+        >
+          <span>▶</span> RUN PIPELINE
+        </button>
+
+        <!-- Pipeline progress (hidden by default) -->
+        <div id="pipeline-progress" class="hidden p-4 rounded-lg bg-navy-800 border border-[rgba(148,163,184,0.08)]">
+          <div class="flex items-center justify-between mb-4">
+            <div class="text-[10px] font-mono text-slate-500 tracking-widest">PIPELINE EXECUTION</div>
+            <div id="progress-badge"></div>
+          </div>
+          <div class="flex items-start">
+            <div class="flex items-center flex-1" id="stage-intake">
+              <div class="flex flex-col items-center gap-1.5">
+                <div class="stage-node w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all duration-300 border-slate-700 bg-navy-800 text-slate-600">
+                  <span class="w-2 h-2 rounded-full border border-current opacity-30 inline-block"></span>
+                </div>
+                <div class="text-center">
+                  <div class="stage-label text-[10px] font-mono font-semibold text-slate-600">Intake Agent</div>
+                  <div class="text-[9px] font-mono text-slate-600 mt-0.5">Classification</div>
+                </div>
+              </div>
+              <div class="flex-1 h-px mx-2 mb-5 stage-line bg-slate-800 transition-colors duration-300"></div>
+            </div>
+            <div class="flex items-center flex-1" id="stage-task">
+              <div class="flex flex-col items-center gap-1.5">
+                <div class="stage-node w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all duration-300 border-slate-700 bg-navy-800 text-slate-600">
+                  <span class="w-2 h-2 rounded-full border border-current opacity-30 inline-block"></span>
+                </div>
+                <div class="text-center">
+                  <div class="stage-label text-[10px] font-mono font-semibold text-slate-600">Task Agent</div>
+                  <div class="text-[9px] font-mono text-slate-600 mt-0.5">Structuring</div>
+                </div>
+              </div>
+              <div class="flex-1 h-px mx-2 mb-5 stage-line bg-slate-800 transition-colors duration-300"></div>
+            </div>
+            <div class="flex items-center" id="stage-priority">
+              <div class="flex flex-col items-center gap-1.5">
+                <div class="stage-node w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all duration-300 border-slate-700 bg-navy-800 text-slate-600">
+                  <span class="w-2 h-2 rounded-full border border-current opacity-30 inline-block"></span>
+                </div>
+                <div class="text-center">
+                  <div class="stage-label text-[10px] font-mono font-semibold text-slate-600">Priority Agent</div>
+                  <div class="text-[9px] font-mono text-slate-600 mt-0.5">Scoring</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Success state -->
+        <div id="success-state" class="hidden p-3 rounded-lg border border-emerald-800/50 bg-emerald-950/30 flex items-center gap-2">
+          <span class="text-emerald-400 text-sm">✓</span>
+          <div class="flex-1 min-w-0">
+            <div class="text-xs font-mono text-emerald-400 font-semibold">PIPELINE COMPLETE</div>
+            <div id="success-meta" class="text-[10px] font-mono text-slate-500 mt-0.5 truncate"></div>
+          </div>
+          <button type="button" id="clear-btn" class="text-[9px] font-mono text-slate-600 hover:text-slate-400 transition-colors">CLEAR</button>
+        </div>
+
+        <!-- Example requests -->
+        <div id="examples-block">
+          <div class="text-[9px] font-mono text-slate-700 tracking-widest mb-2">EXAMPLE REQUESTS</div>
+          <div class="space-y-1.5">
+            <button type="button" class="example-btn w-full text-left text-[11px] text-slate-600 hover:text-slate-400 py-1 px-2 rounded hover:bg-navy-800 transition-all font-sans leading-snug">
+              <span class="text-slate-700 font-mono mr-1.5">→</span>My laptop screen has gone completely blank and won't respond. I have a deadline in 3 hours.
+            </button>
+            <button type="button" class="example-btn w-full text-left text-[11px] text-slate-600 hover:text-slate-400 py-1 px-2 rounded hover:bg-navy-800 transition-all font-sans leading-snug">
+              <span class="text-slate-700 font-mono mr-1.5">→</span>I need to update my emergency contact information in the HR system.
+            </button>
+            <button type="button" class="example-btn w-full text-left text-[11px] text-slate-600 hover:text-slate-400 py-1 px-2 rounded hover:bg-navy-800 transition-all font-sans leading-snug">
+              <span class="text-slate-700 font-mono mr-1.5">→</span>Can someone explain the reimbursement process for work-from-home equipment?
+            </button>
+            <button type="button" class="example-btn w-full text-left text-[11px] text-slate-600 hover:text-slate-400 py-1 px-2 rounded hover:bg-navy-800 transition-all font-sans leading-snug">
+              <span class="text-slate-700 font-mono mr-1.5">→</span>I'm having trouble accessing the shared drive after my password was reset.
+            </button>
+          </div>
+        </div>
+
+      </form>
+    </div>
+
+    <!-- Session history -->
+    <div id="history-block" class="hidden mt-6">
+      <div id="history-label" class="text-[10px] font-mono text-slate-600 tracking-widest mb-2">SESSION HISTORY — 0</div>
+      <div id="history-list" class="space-y-1.5"></div>
+    </div>
+
+  </div>
+</div>
+
+<%- include('partials/footer') %>
+<script src="/js/inbox.js"></script>
+</body>
+</html>

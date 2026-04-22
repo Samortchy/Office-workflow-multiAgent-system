@@ -1,0 +1,28 @@
+<% var title = 'Queue'; %>
+<%- include('partials/header') %>
+
+<div class="min-h-screen flex flex-col">
+
+  <!-- Stats bar -->
+  <div id="stats-bar" class="border-b border-[rgba(148,163,184,0.08)] bg-navy-900" style="min-height:56px"></div>
+
+  <div class="flex-1 p-6">
+
+    <div class="mb-6">
+      <h1 class="heading-display text-xl text-white">Queue</h1>
+      <p class="text-xs text-slate-500 font-mono mt-1">Resolved envelopes sorted by priority — auto-queue vs. human review</p>
+    </div>
+
+    <div id="queue-grid" class="grid grid-cols-1 lg:grid-cols-2 gap-6"></div>
+
+    <!-- Summary footer -->
+    <div id="queue-summary" class="mt-6 pt-4 border-t border-[rgba(148,163,184,0.07)] flex items-center gap-6"></div>
+
+  </div>
+</div>
+
+<script>window.INITIAL_ENVELOPES = <%- JSON.stringify(envelopes) %>;</script>
+<%- include('partials/footer') %>
+<script src="/js/queue.js"></script>
+</body>
+</html>
