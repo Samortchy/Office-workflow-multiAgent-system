@@ -1,0 +1,177 @@
+[
+  {
+    "envelope_id": "ENV-17B2CC",
+    "raw_text": "Subject: Formal Workplace Complaint\n\nDear HR,\n\nI would like to file a formal complaint regarding my manager. \nOver the past few weeks, he has been making inappropriate remarks \nduring team meetings and creating a hostile work environment.\n\nThis situation has made me feel uncomfortable and stressed at work.\n\nI would appreciate if this matter could be reviewed as soon as possible.\n\nSincerely,\nFatima Khaled",
+    "received_at": "2026-04-22T23:48:03.187110+00:00",
+    "errors": [],
+    "intake": {
+      "department": "HR",
+      "task_type": "workplace_complaint",
+      "isAutonomous": false,
+      "reasoning": "The request is for a formal workplace complaint, which requires human intervention and is not an autonomous task.",
+      "confidence": 0.9,
+      "processed_at": "2026-04-22T23:48:04.019241+00:00"
+    },
+    "task": {
+      "task_id": "TASK-A85BF8",
+      "title": "Formal Workplace Complaint",
+      "description": "A formal complaint is being filed regarding a manager's inappropriate remarks during team meetings, creating a hostile work environment.",
+      "department": "HR",
+      "isAutonomous": false,
+      "task_type": "workplace_complaint",
+      "requester_name": "Fatima Khaled",
+      "stated_deadline": "none stated",
+      "action_required": "Review the formal complaint regarding the manager's behavior.",
+      "success_criteria": "The complaint is thoroughly investigated and appropriate action is taken to resolve the issue.",
+      "structured_at": "2026-04-22T23:48:06.134283+00:00"
+    },
+    "priority": {
+      "priority_score": 1,
+      "priority_label": "low",
+      "confidence": 0.999,
+      "model_version": "1.0.0",
+      "top_features_used": [],
+      "scored_at": "2026-04-22T23:48:08Z"
+    }
+  },
+  {
+    "envelope_id": "ENV-EEC776",
+    "raw_text": "Subject: Annual Leave Balance Request\n\nHello HR,\n\nI am planning to submit a vacation request for next month and wanted to confirm \nhow many annual leave days I currently have remaining.\n\nCould you please share my available leave balance?\n\nKind regards,\nMohamed Ali",
+    "received_at": "2026-04-22T23:47:25.981298+00:00",
+    "errors": [],
+    "intake": {
+      "department": "HR",
+      "task_type": "leave_balance_inquiry",
+      "isAutonomous": true,
+      "reasoning": "The request is for leave balance information, which is a straightforward inquiry that can be handled autonomously.",
+      "confidence": 0.9,
+      "processed_at": "2026-04-22T23:47:26.647993+00:00"
+    },
+    "task": {
+      "task_id": "TASK-BC4D58",
+      "title": "Annual Leave Balance Inquiry",
+      "description": "The employee, Mohamed Ali, is planning to submit a vacation request for next month and wants to confirm his remaining annual leave days.",
+      "department": "HR",
+      "isAutonomous": true,
+      "task_type": "leave_balance_inquiry",
+      "requester_name": "Mohamed Ali",
+      "stated_deadline": "none stated",
+      "action_required": "Share the employee's available leave balance.",
+      "success_criteria": "The employee receives his current annual leave balance.",
+      "structured_at": "2026-04-22T23:47:29.715449+00:00"
+    },
+    "priority": {
+      "priority_score": 1,
+      "priority_label": "low",
+      "confidence": 0.999,
+      "model_version": "1.0.0",
+      "top_features_used": [],
+      "scored_at": "2026-04-22T23:47:32Z"
+    }
+  },
+  {
+    "envelope_id": "ENV-092237",
+    "raw_text": "Subject: Follow-up on Expense Report Submission\n\nDear Finance Team,\n\nI wanted to check on the status of my expense report that I submitted last Tuesday \nfor the Cairo conference travel.\n\nMy name is Sarah Ahmed, and the report included hotel and transportation expenses.\n\nPlease let me know if anything else is needed from my side.\n\nThank you,\nSarah Ahmed",
+    "received_at": "2026-04-22T23:45:38.017089+00:00",
+    "errors": [],
+    "intake": {
+      "department": "Finance",
+      "task_type": "expense_report_status",
+      "isAutonomous": true,
+      "reasoning": "The request is a follow-up on the status of an expense report submission, which is classified as an autonomous task in the Finance department.",
+      "confidence": 0.9,
+      "processed_at": "2026-04-22T23:45:38.821911+00:00"
+    },
+    "task": {
+      "task_id": "TASK-D6BAE1",
+      "title": "Expense Report Status Inquiry",
+      "description": "Sarah Ahmed is inquiring about the status of her expense report for the Cairo conference travel, which was submitted last Tuesday and included hotel and transportation expenses.",
+      "department": "Finance",
+      "isAutonomous": true,
+      "task_type": "expense_report_status",
+      "requester_name": "Sarah Ahmed",
+      "stated_deadline": "none stated",
+      "action_required": "Investigate the status of Sarah Ahmed's expense report and respond with an update.",
+      "success_criteria": "Sarah Ahmed receives a response with the current status of her expense report.",
+      "structured_at": "2026-04-22T23:45:44.142277+00:00"
+    },
+    "priority": {
+      "priority_score": 1,
+      "priority_label": "low",
+      "confidence": 0.999,
+      "model_version": "1.0.0",
+      "top_features_used": [],
+      "scored_at": "2026-04-22T23:45:47Z"
+    }
+  },
+  {
+    "envelope_id": "ENV-A58E5A",
+    "raw_text": "Subject: Cannot Log Into Work Account\n\nHello,\n\nI forgot my password and now I cannot log into my company account. \nCould you please reset my password for the account john.doe@company.com?\n\nThis is preventing me from accessing internal systems.\n\nBest regards,\nJohn Doe",
+    "received_at": "2026-04-22T23:42:40.302905+00:00",
+    "errors": [],
+    "intake": {
+      "department": "IT",
+      "task_type": "password_reset",
+      "isAutonomous": true,
+      "reasoning": "The request is for a password reset, which is a routine and autonomous task handled by the IT department.",
+      "confidence": 0.9,
+      "processed_at": "2026-04-22T23:42:41.260294+00:00"
+    },
+    "task": {
+      "task_id": "TASK-AEFA72",
+      "title": "Password Reset Request",
+      "description": "John Doe forgot his password and cannot log into his company account, preventing access to internal systems. He requests a password reset for his account john.doe@company.com.",
+      "department": "IT",
+      "isAutonomous": true,
+      "task_type": "password_reset",
+      "requester_name": "John Doe",
+      "stated_deadline": "none stated",
+      "action_required": "Reset the password for the account john.doe@company.com.",
+      "success_criteria": "John Doe can log into his company account successfully.",
+      "structured_at": "2026-04-22T23:42:48.766605+00:00"
+    },
+    "priority": {
+      "priority_score": 4,
+      "priority_label": "critical",
+      "confidence": 0.769,
+      "model_version": "1.0.0",
+      "top_features_used": [],
+      "scored_at": "2026-04-22T23:42:52Z"
+    }
+  },
+  {
+    "envelope_id": "ENV-5A9C16",
+    "raw_text": "Subject: Urgent Laptop Replacement Needed\n\nHi IT Team,\n\nMy laptop screen cracked this morning after it slipped from my desk. \nThe display is flickering badly and I can barely read anything on it.\n\nI need a replacement as soon as possible since I use this laptop for daily reporting and meetings.\n\nThanks,\nAhmed Hassan\nFinance Department",
+    "received_at": "2026-04-22T23:11:59.275020+00:00",
+    "errors": [],
+    "intake": {
+      "department": "IT",
+      "task_type": "laptop_procurement",
+      "isAutonomous": false,
+      "reasoning": "The request is for a laptop replacement, which requires human intervention and approval, hence it is not autonomous.",
+      "confidence": 0.9,
+      "processed_at": "2026-04-22T23:12:00.319111+00:00"
+    },
+    "task": {
+      "task_id": "TASK-0600AB",
+      "title": "Laptop Replacement Needed",
+      "description": "The requester's laptop screen cracked and the display is flickering, making it difficult to use for daily reporting and meetings.",
+      "department": "IT",
+      "isAutonomous": false,
+      "task_type": "laptop_procurement",
+      "requester_name": "Ahmed Hassan",
+      "stated_deadline": "none stated",
+      "action_required": "Replace the requester's laptop as soon as possible.",
+      "success_criteria": "The requester receives a functional replacement laptop and can resume daily reporting and meetings without technical issues.",
+      "structured_at": "2026-04-22T23:12:04.014844+00:00"
+    },
+    "priority": {
+      "priority_score": 4,
+      "priority_label": "critical",
+      "confidence": 0.801,
+      "model_version": "1.0.0",
+      "top_features_used": [],
+      "scored_at": "2026-04-22T23:12:06Z"
+    }
+  }
+]

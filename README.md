@@ -1,568 +1,280 @@
-# MedBuddy
+# 🤖 Autonomous Office Workflow Automation
 
-### AI-Powered Medical Companion Mobile Application
+### Using Multi-Agent Systems and Machine Learning
 
-> A Flutter-based mobile health companion designed for elderly patients and their caregivers. MedBuddy combines real-time AI conversation, proactive wellness monitoring, fall detection with two-factor liveness verification, and an emergency escalation chain — all in a single role-based application built for accessibility and safety.
-
------
-
-## Table of Contents
-
-1. [Overview](#overview)
-1. [Core Features](#core-features)
-1. [Tech Stack](#tech-stack)
-1. [Architecture](#architecture)
-1. [Communication Layer](#communication-layer)
-1. [User Roles](#user-roles)
-1. [Screen Inventory](#screen-inventory)
-1. [Emergency Escalation Chain](#emergency-escalation-chain)
-1. [Design System](#design-system)
-1. [Project Structure](#project-structure)
-1. [Getting Started](#getting-started)
-1. [Backend Integration](#backend-integration)
-1. [Roadmap](#roadmap)
+> **Final Project** — Faculty of Computer Science, Misr International University (MIU)  
+> **Supervisor:** Dr. Walaa Hassan  |  **Teaching Assistant:** T.A. Mohamed Afify
 
 -----
 
-## Overview
+## 👥 Team Members
 
-MedBuddy is a mobile application serving two distinct user roles — **Patient** and **Caregiver** — from a single codebase. The role is selected at registration and determines the entire app experience from that point forward.
-
-The application is designed specifically for elderly patients living with chronic conditions such as diabetes, hypertension, heart disease, and Alzheimer’s. Every design decision — from minimum touch target sizes to semantic color usage — prioritizes accessibility, legibility, and calm under pressure.
-
-The core safety loop works as follows:
-
-1. The AI buddy conducts daily wellness check-ins and monitors medication adherence
-1. The device accelerometer continuously monitors for falls in the background
-1. If a fall is detected or the patient triggers SOS manually, a two-factor liveness verification begins
-1. If verification fails, a real-time audio channel opens directly to the caregiver’s device
-1. If the caregiver cannot be reached, the system falls back to SMS and then to 911
+|#|Name          |Student ID|
+|-|--------------|----------|
+|1|Ali Abdallah  |2022/05974|
+|2|Ismail Hesham |2022/00106|
+|3|Abubakr Hegazy|2022/02645|
+|4|Mena Khaled   |2022/03649|
+|5|Ahmed Samer   |2022/08211|
 
 -----
 
-## Core Features
+## 📌 Table of Contents
 
-### Phase 1 — MVP
-
-- **Patient profile setup** — structured onboarding covering health conditions, medications, mobility level, cognitive state, emergency contacts, and check-in preferences. All data feeds into fall detection sensitivity, AI response style, and emergency behavior
-- **Medication reminders** — push notifications, on-device TTS read-aloud, conversational AI follow-up, and escalation SMS if unacknowledged within a configurable grace period
-- **Appointment reminders** — 24-hour and 1-hour reminders per appointment
-- **Manual SOS button** — persistent across all screens, requires a 3-second hold-to-confirm to prevent accidental triggers. Sends SMS, shares GPS, and activates native 911
-
-### Phase 2 — Voice & Check-ins
-
-- **Full voice interaction** — STT via OpenAI Whisper converts speech to text across all screens. TTS via ElevenLabs renders AI responses in a warm natural voice
-- **AI wellness check-ins** — proactive daily check-ins covering mood, energy, pain level (compared against the patient’s baseline), sleep quality, and medication confirmation
-- **Emergency response flow** — structured multi-step response triggered by SOS or automated detection, using Agora SDK for real-time audio instead of VoIP
-
-### Phase 3 — Fall Detection
-
-- **On-device fall detection** — continuous background monitoring via device accelerometer and gyroscope using the `sensors_plus` Flutter plugin
-- **10-second cancellation window** — false positives can be dismissed silently before verification begins
-- **Two-factor liveness verification** — inspired by 2FA authentication principles:
-  - **Factor 1** — named response: TTS asks the patient to say their full name. STT matches against the registered name in the profile
-  - **Factor 1.5** — grace retry: a second prompt with a 5-second pause covers disoriented or STT misfire cases
-  - **Factor 2** — Agora audio channel: both factors fail → Agora opens a real-time two-way audio channel to the caregiver instantly
-- **Cognitive impairment adjustment** — for users flagged with cognitive impairment, strict name-match is replaced with detection of any coherent verbal response
-
-### Phase 4 — Caregiver Mobile
-
-- **Role-based experience** — the caregiver sees a completely different home screen and navigation from the patient
-- **Patient linking** — invite code system where the patient generates a 6-digit code or shareable link. The caregiver enters it and the patient approves or denies access
-- **Live patient list** — real-time status dots (green / amber / red) with active emergencies auto-sorted to top
-- **Remote medication management** — full edit access to patient’s medication schedule. All changes notify the patient in real time
-- **Emergency active screen** — opens automatically via FCM push when liveness verification fails. Agora channel is live instantly — no tap required on the caregiver side
-- **Health history and AI insights** — full access to wellness timelines, AI-flagged patterns, adherence heatmaps, and emergency event logs
-- **Caregiver-patient messaging** — text and voice messages (via Agora) in a shared conversation thread. Health reports shareable directly into chat
-
-### Phase 5 — Symptom & Visit Logs
-
-- **Daily symptom log** — voice or text entries in a chronological timeline. AI highlights flagged and watch-level entries
-- **Doctor visit voice summaries** — patient speaks freely after an appointment. Whisper transcribes it and AI produces a structured note with diagnosis, medications changed, instructions, and next appointment
-
-### Phase 6 — Wearable
-
-- **Apple Watch companion** — fall detection via wrist accelerometer, liveness verification via watch speaker/mic, escalation handoff to iPhone. Medication reminders as haptic taps. HealthKit integration for heart rate, activity, and sleep data
+- [Project Overview](#-project-overview)
+- [Problem Statement](#-problem-statement)
+- [Proposed Solution](#-proposed-solution)
+- [System Architecture](#-system-architecture)
+- [Agents & Responsibilities](#-agents--responsibilities)
+- [Machine Learning Integration](#-machine-learning-integration)
+- [Goals](#-goals)
+- [Objectives](#-objectives)
+- [Evaluation Metrics](#-evaluation-metrics)
+- [Work Distribution](#-work-distribution)
+- [Conclusion](#-conclusion)
 
 -----
 
-## Tech Stack
+## 📖 Project Overview
 
-|Layer             |Technology                                          |
-|------------------|----------------------------------------------------|
-|Mobile framework  |Flutter (Dart)                                      |
-|AI language model |Qwen 2.5 7B (via backend API)                       |
-|Speech-to-text    |OpenAI Whisper / Faster-Whisper Large-v3 Turbo      |
-|Text-to-speech    |ElevenLabs / Coqui XTTS-v2                          |
-|Real-time audio   |Agora SDK (Flutter SDK, free tier: 10,000 min/month)|
-|Push notifications|Firebase Cloud Messaging (FCM)                      |
-|SMS fallback      |Twilio SMS                                          |
-|Emergency calls   |Native Emergency SOS (platform-managed)             |
-|Backend API       |FastAPI (Python)                                    |
-|RAG pipeline      |FAISS + LangGraph                                   |
-|Emotion fusion    |HuBERT + CAMeL-BERT                                 |
-|Motion sensing    |`sensors_plus` Flutter plugin                       |
-|Wearable (Phase 6)|watchOS + HealthKit                                 |
+This project proposes and implements an **Autonomous Office Workflow Automation System** built on a **multi-agent architecture** enhanced by **machine learning**. The system is designed to automatically handle incoming office requests from start to finish — classifying them, structuring them into tasks, prioritizing them intelligently, allocating resources, executing work, and continuously learning from outcomes — all with minimal human intervention.
+
+The core idea is to move beyond today’s brittle, rule-heavy automation tools and build a system that can reason, adapt, and improve on its own. By combining the decision-making power of intelligent agents with the predictive power of machine learning, this system represents a practical step toward truly autonomous office operations.
 
 -----
 
-## Architecture
+## ❗ Problem Statement
+
+Traditional office automation systems are built on **rigid, predefined rules** and require significant **human supervision** to function correctly. While these systems work well for simple, repetitive tasks in stable environments, they break down when faced with the realities of a dynamic workplace:
+
+- **Dynamic workloads** — the volume and type of requests change constantly and unpredictably.
+- **Ambiguous requests** — natural language requests rarely fit neatly into predefined categories.
+- **Changing priorities** — urgency shifts based on context, deadlines, and business conditions.
+- **Failure handling** — rule-based systems have no mechanism to learn from mistakes or adapt when things go wrong.
+
+The result is a system that constantly needs human correction, cannot scale efficiently, and provides no improvement over time. There is a clear need for a smarter, more autonomous approach.
+
+-----
+
+## 💡 Proposed Solution
+
+Our system addresses these limitations through a **multi-agent architecture** where each agent is a specialized, autonomous unit responsible for a specific stage of the workflow. Agents communicate with each other, reason about their inputs, and take actions — all within a continuous loop:
+
+```
+Perception → Reasoning → Action → Learning
+```
+
+Machine learning is layered on top of agent reasoning to handle the tasks that benefit most from data-driven predictions — such as classifying the type of a request, predicting how urgent it is, or detecting when something has gone wrong. Crucially, the ML models are chosen to be **lightweight and explainable**, so the system remains transparent and auditable.
+
+This is not a black-box AI system. Every decision can be traced back to an agent, a model, or a rule — making it suitable for real-world deployment in environments where accountability matters.
+
+-----
+
+## 🏗️ System Architecture
+
+The system follows a **perception–reasoning–action–learning** loop, meaning it continuously observes incoming data, applies reasoning and ML predictions to decide what to do, takes action, and then feeds the outcome back into the system to improve future decisions.
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│                    Flutter Mobile App                    │
-│                                                         │
-│  ┌──────────────┐              ┌──────────────────────┐ │
-│  │ Patient Role │              │   Caregiver Role     │ │
-│  │  S-01→S-29   │              │   C-01→C-11          │ │
-│  └──────┬───────┘              └──────────┬───────────┘ │
-│         │                                │              │
-│  ┌──────▼──────────────────────────────▼───────────┐   │
-│  │              Shared Service Layer                │   │
-│  │  AIService │ STTService │ TTSService │ Agora     │   │
-│  │  EmergencyService │ MedicationService            │   │
-│  └──────────────────────┬───────────────────────────┘   │
-└─────────────────────────│───────────────────────────────┘
-                          │
-          ┌───────────────▼────────────────┐
-          │         FastAPI Backend         │
-          │                                │
-          │  ┌─────────┐  ┌─────────────┐ │
-          │  │ Qwen 2.5│  │Faster-Whisper│ │
-          │  │   7B    │  │  Large-v3   │ │
-          │  └─────────┘  └─────────────┘ │
-          │                                │
-          │  ┌─────────┐  ┌─────────────┐ │
-          │  │  FAISS  │  │ HuBERT +   │ │
-          │  │   RAG   │  │ CAMeL-BERT │ │
-          │  └─────────┘  └─────────────┘ │
-          └────────────────────────────────┘
-                          │
-          ┌───────────────▼────────────────┐
-          │       External Services         │
-          │  Agora SDK │ Twilio │ FCM      │
-          └────────────────────────────────┘
+│                  INCOMING OFFICE REQUESTS                │
+│              (emails, tickets, messages, etc.)           │
+└────────────────────────┬────────────────────────────────┘
+                         │
+                         ▼
+              ┌─────────────────────┐
+              │    Intake Agent     │  ◄── ML: Text Classification
+              │  (classify request) │
+              └──────────┬──────────┘
+                         │
+                         ▼
+          ┌──────────────────────────────┐
+          │    Task Structuring Agent    │  ◄── Rule-Based Logic
+          │ (convert to structured task) │
+          └──────────────┬───────────────┘
+                         │
+                         ▼
+              ┌─────────────────────┐
+              │   Priority Agent    │  ◄── ML: Random Forest
+              │  (predict urgency)  │
+              └──────────┬──────────┘
+                         │
+                         ▼
+              ┌────────────────────┐
+             _│  Scheduler Agent   │_  ◄── Optimization & Heuristics
+            |_(allocate to resource)_│
+              └──────────┬─────────┘
+                         │
+                         ▼
+              ┌─────────────────────┐
+              │  Execution Agent    │  ◄── Simulation + Failure Handling
+              │   (run the task)    │
+              └──────────┬──────────┘
+                         │
+                         ▼
+          ┌──────────────────────────────┐
+          │  Feedback & Learning Agent   │  ◄── ML: Retraining Loop
+          │ (monitor, evaluate, retrain) │
+          └──────────────────────────────┘
 ```
 
 -----
 
-## Communication Layer
+## 🤝 Agents & Responsibilities
 
-### Agora SDK — Primary Real-Time Audio
+The system is composed of **six specialized agents**, each owning a distinct stage of the workflow pipeline.
 
-All real-time audio between patient and caregiver is delivered through the Agora SDK. Agora was chosen because it:
+### 1. 📥 Intake Agent
 
-- Is free up to 10,000 minutes/month — sufficient for MVP and testing
-- Has a production-ready Flutter SDK
-- Supports background audio on both iOS and Android natively
-- Can wake a locked device via FCM push notification without any user interaction
+The entry point of the system. The Intake Agent receives all incoming office requests — whether they arrive as emails, support tickets, or form submissions — and classifies them using a trained machine learning model. Its job is to answer the question: *“What kind of request is this?”*
 
-**Two use cases:**
-
-1. **Emergency channel** — opens automatically when fall liveness verification fails. Both patient speaker and caregiver mic/speaker go live instantly. No tap required on either side
-1. **Voice messages in chat** — the same Agora infrastructure powers voice note recording and playback in the caregiver-patient chat thread
-
-### Twilio SMS — Fallback Only
-
-Twilio SMS is a fallback for when the caregiver’s device cannot be reached via Agora:
-
-- SMS sent to emergency contact when Agora channel fails to connect within 30 seconds
-- SMS used for medication escalation notifications
-- Final confirmation SMS after 911 activation — sent regardless of channel status
+- **Input:** Raw text (email body, message, request form)
+- **Output:** A labeled category (e.g., IT Support, HR Request, Facilities, Finance)
+- **ML Model:** TF-IDF vectorizer + Logistic Regression classifier
+- **Why this model:** Fast, interpretable, and highly effective for short-to-medium text classification with limited training data
 
 -----
 
-## User Roles
+### 2. 🗂️ Task Structuring Agent
 
-### Patient Role (S-01 to S-29)
+Once a request is classified, it needs to be turned into something the rest of the system can act on. The Task Structuring Agent converts the raw classified request into a **structured task object** — a well-defined unit of work with a clear description, type, and metadata.
 
-The primary user — typically an elderly person living with one or more chronic conditions. The patient-facing UI is designed for maximum accessibility: large touch targets (minimum 56dp), large text (minimum 16sp), warm color palette, and voice as the primary input method throughout the app.
-
-Key patient capabilities:
-
-- Complete profile setup covering health, mobility, cognitive state, medications, and emergency contacts
-- Daily AI wellness check-ins via voice or text
-- Medication schedule management with reminders
-- Appointment tracking
-- Manual SOS with 3-second hold confirmation
-- Fall detection with two-factor liveness verification
-- Full health history — wellness charts, medication adherence heatmap, emergency event log
-- Caregiver invite and access management
-- Doctor visit voice summaries and symptom logging
-
-### Caregiver Role (C-01 to C-11)
-
-A family member, nurse, or care professional linked to one or more patients. The caregiver sees an entirely different home screen and navigation after login. One caregiver can be linked to multiple patients.
-
-Key caregiver capabilities:
-
-- Live patient list with real-time status dots
-- Automated FCM-triggered emergency screen that wakes from locked screen
-- Remote medication and appointment management
-- Trigger on-demand wellness check-ins for any patient
-- Full health history access with AI-generated pattern insights
-- Caregiver-patient messaging with health report sharing
-- Post-emergency outcome logging
+- **Input:** Classified request from the Intake Agent
+- **Output:** A structured task (title, type, description, requester info, timestamp)
+- **Approach:** Rule-based logic with template matching
+- **Why rule-based:** Task structuring follows predictable patterns that don’t require ML — rules are more reliable and auditable here
 
 -----
 
-## Screen Inventory
+### 3. ⚡ Priority Agent
 
-### Patient Screens (29 screens)
+Not all tasks are equally urgent. The Priority Agent examines each structured task and assigns it a **priority score** based on features like request type, keywords, requester history, and time sensitivity. This determines how soon the task needs to be handled.
 
-|Screen|Name                                      |Phase|
-|------|------------------------------------------|-----|
-|S-01  |Welcome & Language Selection              |1    |
-|S-02  |Role Selection                            |1    |
-|S-03  |Login / Register                          |1    |
-|S-04  |Profile Setup — Basic Info                |1    |
-|S-05  |Profile Setup — Health Conditions         |1    |
-|S-06  |Profile Setup — Mobility & Cognitive State|1    |
-|S-07  |Profile Setup — Medications               |1    |
-|S-08  |Profile Setup — Emergency Contacts        |1    |
-|S-09  |Profile Setup — Check-in Preferences      |1    |
-|S-10  |Profile Setup — Review & Confirm          |1    |
-|S-11  |Home Dashboard                            |1    |
-|S-12  |SOS Confirmation Overlay                  |1    |
-|S-13  |Medication Schedule                       |1    |
-|S-14  |Add / Edit Medication                     |1    |
-|S-15  |Appointment Reminders                     |1    |
-|S-16  |Reminder Notification — Active State      |1    |
-|S-17  |AI Buddy Chat                             |2    |
-|S-17b |Wellness Check-in — Active                |2    |
-|S-18  |SOS Active                                |2    |
-|S-19  |Fall Detected — Cancellation Window       |3    |
-|S-20  |Fall Verification — Factor 1              |3    |
-|S-21  |Fall Verification — Factor 2 (Agora)      |3    |
-|S-22  |Wellness History                          |2    |
-|S-23  |Medication Adherence History              |2    |
-|S-24  |Emergency Event Log                       |2    |
-|S-25  |My Profile                                |1    |
-|S-26  |Patient Chat (with Caregiver)             |4    |
-|S-27  |App Settings                              |1    |
-|S-28  |Symptom Log                               |5    |
-|S-29  |Visit Summary Recorder                    |5    |
-
-### Caregiver Screens (11 screens)
-
-|Screen|Name                                |Phase|
-|------|------------------------------------|-----|
-|C-01  |Caregiver Home — Patient List       |4    |
-|C-02  |Add Patient — Invite Code Entry     |4    |
-|C-03  |Combined Alerts Feed                |4    |
-|C-04  |Patient Dashboard                   |4    |
-|C-05  |Patient Medications (Caregiver Edit)|4    |
-|C-06  |Patient Health History              |4    |
-|C-07  |Emergency Active Screen             |4    |
-|C-08  |Caregiver Chat (with Patient)       |4    |
-|C-09  |Caregiver Profile & Linked Patients |4    |
-|C-10  |Pending Link Approval (Patient Side)|4    |
-|C-11  |Caregiver Settings                  |4    |
-
-**Total: 40 screens across 2 roles**
+- **Input:** Structured task object
+- **Output:** Priority score / urgency label (e.g., High, Medium, Low)
+- **ML Model:** Random Forest Classifier
+- **Why this model:** Random Forest handles mixed feature types well, is robust to noise, and provides feature importance scores for explainability
 
 -----
 
-## Emergency Escalation Chain
+### 4. 📅 Scheduler Agent
 
-The full escalation chain for both manual SOS and fall detection:
+With tasks prioritized, the Scheduler Agent decides **who does what and when**. It looks at available resources (human staff, automated handlers, queues), applies optimization algorithms and scheduling heuristics, and assigns each task to the most appropriate resource at the right time.
 
-```
-User triggers SOS manually
-        OR
-Device detects a fall
-        │
-        ▼
-┌─────────────────────────────┐
-│  10-second cancellation     │ ──── User cancels ──── END
-│  window (fall only)         │
-└──────────────┬──────────────┘
-               │ No cancel
-               ▼
-┌─────────────────────────────┐
-│  Factor 1 — Name match      │
-│  TTS: "Say your full name"  │
-│  STT matches profile name   │
-└──────────────┬──────────────┘
-               │ No match / no response
-               ▼
-┌─────────────────────────────┐
-│  Factor 1.5 — Grace retry   │
-│  5-second pause, 2nd prompt │
-└──────────────┬──────────────┘
-               │ Still fails
-               ▼
-┌─────────────────────────────┐
-│  Factor 2 — Agora channel   │
-│  FCM wakes caregiver app    │
-│  Audio live on both sides   │
-│  Loud alarm on patient      │
-└──────────────┬──────────────┘
-               │ Agora fails within 30s
-               ▼
-┌─────────────────────────────┐
-│  Fallback — Twilio SMS      │
-│  + automated voice call     │
-│  to caregiver phone         │
-└──────────────┬──────────────┘
-               │ No answer after 30s
-               ▼
-┌─────────────────────────────┐
-│  Native Emergency SOS       │
-│  Dials 911                  │
-│  Shares GPS coordinates     │
-└──────────────┬──────────────┘
-               │
-               ▼
-┌─────────────────────────────┐
-│  Final confirmation SMS     │
-│  Sent regardless of status  │
-│  Includes last known GPS    │
-└─────────────────────────────┘
-```
+- **Input:** Prioritized task queue + resource availability
+- **Output:** Task assignment and scheduled execution time
+- **Approach:** Constraint-based optimization + priority queue heuristics
+- **Key challenge:** Balancing throughput (getting tasks done quickly) with fairness and deadline adherence
 
 -----
 
-## Design System
+### 5. ⚙️ Execution Agent
 
-### Color Palette
+The Execution Agent is responsible for actually **running the task** — whether that means calling an API, filling a form, sending a notification, or simulating a real-world action in the prototype environment. It also handles the unexpected: delays, errors, and failures.
 
-The color system is built around two principles: maximum legibility for elderly users and instant recognition in emergency situations. Every color carries a single unambiguous meaning.
-
-|Role          |Color     |Hex      |Usage                         |
-|--------------|----------|---------|------------------------------|
-|App background|Warm White|`#FAFAF9`|All screen backgrounds        |
-|Primary       |Teal      |`#0D9488`|Buttons, links, AI bubbles    |
-|Primary Dark  |Dark Teal |`#0F766E`|Headers, active nav           |
-|Primary Light |Light Teal|`#99F6E4`|Chips, tags                   |
-|Primary Soft  |Soft Teal |`#F0FDFA`|Card backgrounds              |
-|Emergency     |Red       |`#DC2626`|SOS screens, fall verification|
-|Warning       |Amber     |`#D97706`|Missed meds, overdue check-ins|
-|Success       |Green     |`#16A34A`|Taken meds, confirmed states  |
-|Body text     |Slate 700 |`#334155`|All readable body content     |
-|Primary text  |Slate 900 |`#0F172A`|Headings and labels           |
-|Secondary text|Slate 500 |`#64748B`|Timestamps, helper text       |
-|Dividers      |Slate 300 |`#CBD5E1`|List separators               |
-|Input fields  |Slate 100 |`#F1F5F9`|Text field backgrounds        |
-
-**Rules:**
-
-- Red is **never** used for anything except emergency states
-- Green is **never** used for anything except success/safe states
-- All text on background combinations meet WCAG AA minimum (4.5:1 contrast ratio)
-- No gradients on functional elements — buttons, badges, and status indicators use flat colors
-
-### Typography
-
-|Style    |Size   |Weight  |Usage                         |
-|---------|-------|--------|------------------------------|
-|Heading 1|24sp   |Bold    |Patient name, screen titles   |
-|Heading 2|20sp   |Bold    |Section titles                |
-|Heading 3|17sp   |Bold    |App bar titles                |
-|Body     |16sp   |Regular |All readable content (minimum)|
-|Body Bold|16sp   |SemiBold|Medication names, card titles |
-|Secondary|14sp   |Regular |Supporting information        |
-|Label    |13sp   |Regular |Chips, badges, helper text    |
-|Caption  |11sp   |Regular |Timestamps, metadata          |
-|Emergency|28–32sp|Bold    |Emergency screen text         |
-
-### Accessibility Standards
-
-- Minimum touch target: **56dp** for primary buttons, **44dp** for secondary
-- Minimum font size: **16sp** for all patient-facing readable text
-- Line height: **1.5x** font size minimum
-- Letter spacing: **0.02em** on body text for improved readability
-- Light mode only — dark mode reduces contrast on semantic colors and is harder to read for elderly users
-- No gradients on interactive elements
+- **Input:** Assigned task with execution parameters
+- **Output:** Execution result (success, partial completion, failure) + status log
+- **Failure handling:** Automatic retry with exponential backoff; escalation to human on repeated failure
+- **In the prototype:** Execution is simulated to allow for controlled testing of failure scenarios
 
 -----
 
-## Project Structure
+### 6. 🔁 Feedback & Learning Agent
 
-```
-lib/
-├── constants/
-│   ├── colors.dart           # Single source of truth for all colors
-│   ├── text_styles.dart      # All text styles with correct sizes
-│   └── dimens.dart           # Spacing, touch targets, border radii
-│
-├── services/
-│   └── service_interfaces.dart  # Abstract contracts for all backend services
-│                                 # AIService, STTService, TTSService,
-│                                 # AgoraService, EmergencyService
-│                                 # + all data models
-│
-├── widgets/
-│   └── shared/
-│       ├── sos_button.dart       # Persistent SOS floating button
-│       └── bottom_nav_bar.dart   # Patient bottom navigation bar
-│
-├── screens/
-│   ├── s11_home_dashboard.dart
-│   ├── s12_sos_confirmation.dart
-│   ├── s13_medication_schedule.dart
-│   ├── s14_add_edit_medication.dart
-│   ├── s15_appointment_reminders.dart
-│   ├── s16_reminder_notification.dart
-│   ├── s17_ai_buddy_chat.dart
-│   ├── s17b_wellness_checkin.dart
-│   ├── s22_wellness_history.dart
-│   ├── s23_medication_adherence.dart
-│   ├── s24_emergency_log.dart
-│   ├── s25_my_profile.dart
-│   ├── s26_patient_chat.dart
-│   ├── s27_app_settings.dart
-│   ├── s28_symptom_log.dart
-│   └── s29_visit_summary.dart
-│
-└── medbuddy.dart             # Barrel export — single import for everything
-```
+The most important agent for long-term system health. The Feedback & Learning Agent **closes the loop** — it collects outcome data from the Execution Agent, evaluates how well the system performed against deadlines and quality targets, and periodically retrains the ML models to incorporate new patterns.
+
+- **Input:** Execution results, task outcomes, SLA metrics
+- **Output:** Updated training data, retrained models, performance reports
+- **ML Role:** Triggers retraining of the Intake and Priority agents when performance degrades
+- **Anomaly Detection:** Uses Isolation Forest to flag unusual failure patterns that may indicate systemic issues
 
 -----
 
-## Getting Started
+## 🧠 Machine Learning Integration
 
-### Prerequisites
+ML is used **selectively** in this system — only where it genuinely adds value over rule-based logic. All models are chosen to be lightweight, fast to train, and explainable.
 
-- Flutter SDK 3.x or later
-- Dart 3.x
-- Android Studio or Xcode
-- A Firebase project (for FCM push notifications)
-- An Agora account (free tier covers MVP usage)
+|Model             |Task                          |Algorithm                   |Why                                                |
+|------------------|------------------------------|----------------------------|---------------------------------------------------|
+|Request Classifier|Classify incoming request type|TF-IDF + Logistic Regression|Fast, interpretable, strong baseline for text      |
+|Priority Predictor|Predict task urgency level    |Random Forest               |Handles mixed features, provides feature importance|
+|Anomaly Detector  |Detect failure patterns       |Isolation Forest            |Unsupervised, no labeled anomaly data needed       |
 
-### Installation
+### Design Principles
 
-```bash
-# Clone the repository
-git clone https://github.com/your-org/medbuddy.git
-cd medbuddy
-
-# Install dependencies
-flutter pub get
-
-# Run on device or emulator
-flutter run
-```
-
-### Required Dependencies
-
-Add these to your `pubspec.yaml`:
-
-```yaml
-dependencies:
-  flutter:
-    sdk: flutter
-
-  # Motion sensing for fall detection
-  sensors_plus: ^4.0.0
-
-  # Firebase for FCM push notifications
-  firebase_core: ^2.0.0
-  firebase_messaging: ^14.0.0
-
-  # Agora real-time audio
-  agora_rtc_engine: ^6.0.0
-
-  # Local notifications
-  flutter_local_notifications: ^16.0.0
-
-  # State management (choose your preferred solution)
-  provider: ^6.0.0
-
-  # HTTP client for backend API
-  dio: ^5.0.0
-
-  # Secure storage for auth tokens
-  flutter_secure_storage: ^9.0.0
-```
-
-### Environment Configuration
-
-Create a `.env` file at the project root:
-
-```env
-# Backend
-API_BASE_URL=https://your-backend.com/api
-
-# Agora
-AGORA_APP_ID=your_agora_app_id
-
-# Firebase — handled via google-services.json / GoogleService-Info.plist
-
-# Twilio (handled server-side — do not expose client-side)
-```
+- **Explainability first:** Every ML prediction can be explained with feature weights or importance scores
+- **Evaluated against baselines:** Each model is compared against a rule-based equivalent to justify the added complexity
+- **Continuous improvement:** The Feedback Agent retrains models as new labeled data accumulates, so the system gets smarter over time
 
 -----
 
-## Backend Integration
+## 🎯 Goals
 
-All backend hooks in the codebase are marked with `// TODO:` comments. Each screen accepts its dependencies as constructor parameters following the dependency injection pattern, so you can wire in your implementations without modifying screen code.
-
-### Service Interface Pattern
-
-```dart
-// 1. Create your concrete implementation
-class QwenAIService implements AIService {
-  @override
-  Future<String> sendMessage(String userMessage, {List<ChatMessage>? history}) async {
-    final response = await _api.post('/chat', {
-      'message': userMessage,
-      'history': history?.map((m) => m.toJson()).toList(),
-    });
-    return response.data['content'];
-  }
-
-  @override
-  Stream<String> streamMessage(String userMessage, {List<ChatMessage>? history}) async* {
-    // implement streaming tokens
-  }
-  // ... implement remaining methods
-}
-
-// 2. Inject into the screen
-AIBuddyChatScreen(
-  aiService: QwenAIService(),
-  sttService: WhisperSTTService(),
-  ttsService: ElevenLabsTTSService(),
-)
-```
-
-### Key Integration Points
-
-|Service                          |Screen(s)              |Backend endpoint            |
-|---------------------------------|-----------------------|----------------------------|
-|`AIService.sendMessage`          |S-17, S-17b            |`POST /api/chat`            |
-|`STTService.startListening`      |S-17, S-17b, S-20      |Faster-Whisper              |
-|`TTSService.speak`               |S-16, S-17, S-17b, S-20|ElevenLabs / XTTS           |
-|`AgoraService.openChannel`       |S-21, S-26             |Agora RTC                   |
-|`EmergencyService.triggerSOS`    |S-12, S-18             |`POST /api/emergency/sos`   |
-|`EmergencyService.verifyLiveness`|S-20                   |`POST /api/emergency/verify`|
+1. **Design a scalable multi-agent system** that autonomously processes and routes office requests without human intervention for standard cases.
+1. **Eliminate reliance on rigid rule-based automation** by replacing brittle hand-coded logic with adaptive ML decision-making where appropriate.
+1. **Continuously improve system performance** through a closed feedback-and-retraining loop that learns from every task outcome.
+1. **Deliver a transparent, explainable architecture** that can be audited, understood, and trusted — suitable for real-world organizational deployment.
 
 -----
 
-## Roadmap
+## 📐 Objectives
 
-|Phase                     |Status           |Description                                               |
-|--------------------------|-----------------|----------------------------------------------------------|
-|Phase 1 — MVP             |Frontend complete|Profile setup, medications, appointments, manual SOS      |
-|Phase 2 — Voice           |Frontend complete|AI check-ins, full voice interaction, wellness history    |
-|Phase 3 — Fall Detection  |Frontend complete|Accelerometer monitoring, two-factor liveness verification|
-|Phase 4 — Caregiver Mobile|Frontend complete|Full caregiver role, emergency screen, messaging          |
-|Phase 5 — Symptom Logging |Shell complete   |Voice symptom log, doctor visit summaries                 |
-|Phase 6 — Apple Watch     |Planned          |watchOS companion app, HealthKit integration              |
-|Backend integration       |In progress      |FastAPI, Qwen 2.5, Whisper, XTTS, FAISS RAG               |
+|#|Objective                          |Target                                                                                                           |
+|-|-----------------------------------|-----------------------------------------------------------------------------------------------------------------|
+|1|**Request Classification Accuracy**|Achieve ≥85% accuracy using TF-IDF + Logistic Regression on the held-out test set                                |
+|2|**Priority Prediction**            |Train a Random Forest model that reliably ranks task urgency with measurable precision/recall                    |
+|3|**Failure Detection**              |Use Isolation Forest to automatically detect anomalous execution patterns without labeled data                   |
+|4|**Performance Benchmarking**       |Demonstrate that the multi-agent ML system outperforms a rule-based baseline on throughput and deadline adherence|
+|5|**Modular Architecture**           |Build each agent as an independently deployable, testable module with clearly defined interfaces                 |
 
 -----
 
-## Notes
+## 📊 Evaluation Metrics
 
-- **Light mode only** — dark mode is intentionally not supported. It reduces contrast on semantic color elements and is harder to read for elderly users during extended use
-- **No VoIP** — all real-time audio between patient and caregiver uses the Agora SDK. Twilio Voice has been removed from the communication path entirely
-- **Agora free tier** — 10,000 minutes/month. At MVP scale with a small test group, typical usage is well under 500 minutes/month
-- **Twilio SMS cost** — approximately $0.0079 per SMS. Negligible at MVP scale
-- **Never hardcode colors** — always import from `constants/colors.dart`. All hex values live in one place
-- **SOS button is always visible** — it must appear on every screen via the shared `SOSButton` widget placed inside a `Stack`. No exceptions
+The system is evaluated across both **operational** and **ML-specific** dimensions:
+
+**Operational Metrics**
+
+- **Average task completion time** — how long from request intake to execution completion
+- **Missed deadlines rate** — percentage of tasks that exceeded their deadline
+- **System throughput** — number of tasks processed per unit time
+
+**ML Metrics**
+
+- **Classification accuracy & F1-score** — for the Intake Agent’s request classifier
+- **Precision & Recall** — for the Priority Agent’s urgency predictions
+
+**Baseline Comparison**
+
+- All metrics are compared against a **rule-based automation baseline** to quantify the value added by the multi-agent ML approach
 
 -----
 
-*MedBuddy v2.0 — March 2026*
+## 📋 Work Distribution
+
+|Area                                     |Description                                                                                  |
+|-----------------------------------------|---------------------------------------------------------------------------------------------|
+|Agent Modeling & Communication           |Designing agent interfaces, message formats, and inter-agent communication protocols         |
+|Machine Learning Models & Data           |Building, training, and evaluating the classification, priority, and anomaly detection models|
+|Scheduling & Optimization Logic          |Implementing the Scheduler Agent’s resource allocation and task assignment algorithms        |
+|Simulation Environment                   |Building the environment used to simulate task execution and test failure scenarios          |
+|Evaluation, Visualization & Documentation|Measuring performance, creating dashboards, and producing project documentation              |
+
+-----
+
+## ✅ Conclusion
+
+This project demonstrates that a well-designed **multi-agent system**, enhanced with targeted **machine learning**, can meaningfully automate complex office workflows — going far beyond what rigid rule-based systems can achieve.
+
+The architecture is:
+
+- **Scalable** — new agents can be added or existing ones upgraded without redesigning the whole system
+- **Explainable** — every decision traces back to a specific agent, model, or rule
+- **Adaptive** — the system gets better over time through continuous retraining
+- **Practically grounded** — model choices prioritize reliability and interpretability over raw complexity
+
+The result is a system that can serve as a strong foundation for real-world deployment, further research into autonomous workflow systems, or extension into more complex organizational domains.
+
+-----
+
+*Faculty of Computer Science — Misr International University (MIU) | 2026*  
+*Supervisor: Dr. Walaa Hassan | T.A. Mohamed Afify*

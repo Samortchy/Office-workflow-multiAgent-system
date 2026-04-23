@@ -1,32 +1,47 @@
 import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { MOCK_ENVELOPES } from './data/mockData.js';
+import fs from 'fs/promises';
+
+const dbPath = path.join(path.dirname(fileURLToPath(import.meta.url)), 'database', 'data.json');
+try {
+  await fs.mkdir(path.dirname(dbPath), { recursive: true });
+} catch (e) {}
+
+async function getEnvelopes() {
+  try {
+    const data = await fs.readFile(dbPath, 'utf8');
+    return JSON.parse(data);
+  } catch {
+    return [];
+  }
+}
+
+async function saveEnvelope(env) {
+  const current = await getEnvelopes();
+  current.unshift(env);
+  await fs.writeFile(dbPath, JSON.stringify(current, null, 2));
+}
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
 const PORT = process.env.PORT || 3000;
-const API_BASE = process.env.API_URL || '';
+const API_BASE = process.env.API_URL || 'http://localhost:8000';
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 
-async function fetchEnvelopes() {
-  if (!API_BASE) return MOCK_ENVELOPES;
-  try {
-    const res = await fetch(`${API_BASE}/api/envelopes`);
-    if (!res.ok) throw new Error();
-    return await res.json();
-  } catch {
-    return MOCK_ENVELOPES;
-  }
-}
+
+// ── Page routes ──────────────────────────────────────────────────────────────
+
+// Pages no longer pre-fetch envelopes on load.
+// The browser calls POST /api/pipeline and renders results client-side.
 
 app.get('/', async (req, res) => {
-  const envelopes = await fetchEnvelopes();
-  res.render('dashboard', { envelopes, page: 'dashboard' });
+  const envelopes = await getEnvelopes();
+  res.render('dashboard', { page: 'dashboard', envelopes });
 });
 
 app.get('/inbox', (req, res) => {
@@ -34,69 +49,50 @@ app.get('/inbox', (req, res) => {
 });
 
 app.get('/queue', async (req, res) => {
-  const envelopes = await fetchEnvelopes();
-  res.render('queue', { envelopes, page: 'queue' });
+  const envelopes = await getEnvelopes();
+  res.render('queue', { page: 'queue', envelopes });
 });
 
-// Proxy / mock API endpoints for client-side polling
 app.get('/api/envelopes', async (req, res) => {
-  const data = await fetchEnvelopes();
-  res.json(data);
+  const envelopes = await getEnvelopes();
+  res.json(envelopes);
 });
+
+
+// ── API proxy ─────────────────────────────────────────────────────────────────
 
 app.post('/api/pipeline', async (req, res) => {
   const { raw_text } = req.body;
-  if (API_BASE) {
-    try {
-      const r = await fetch(`${API_BASE}/api/pipeline`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ raw_text }),
-      });
-      if (r.ok) return res.json(await r.json());
-    } catch {}
+
+  if (!raw_text || !raw_text.trim()) {
+    return res.status(400).json({ error: 'raw_text is required' });
   }
-  // Mock response
-  await new Promise(r => setTimeout(r, 2800));
-  const id = `ENV-${Math.random().toString(36).slice(2, 8).toUpperCase()}`;
-  const now = new Date().toISOString();
-  res.json({
-    envelope_id: id,
-    raw_text,
-    received_at: now,
-    errors: [],
-    intake: {
-      department: 'IT',
-      task_type: 'general_inquiry',
-      isAutonomous: true,
-      reasoning: 'Request classified as a routine inquiry that can be resolved via automated response.',
-      confidence: 0.84,
-      processed_at: now,
-    },
-    task: {
-      task_id: `TASK-${id.slice(4)}`,
-      title: 'General IT Inquiry',
-      description: raw_text.slice(0, 120),
-      department: 'IT',
-      isAutonomous: true,
-      task_type: 'general_inquiry',
-      requester_name: 'Unknown',
-      stated_deadline: 'None',
-      action_required: 'Route to automated knowledge base. Return relevant help articles within 2 minutes.',
-      success_criteria: 'User receives relevant response within SLA window.',
-      structured_at: now,
-    },
-    priority: {
-      priority_score: 2,
-      priority_label: 'medium',
-      confidence: 0.79,
-      model_version: 'priority-agent-v2.1',
-      top_features_used: ['task_type', 'is_autonomous', 'routine'],
-      scored_at: now,
-    },
-  });
+
+  try {
+    const r = await fetch(`${API_BASE}/api/pipeline`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ raw_text }),
+    });
+
+    const data = await r.json();
+
+    if (!r.ok) {
+      return res.status(r.status).json({ error: data.detail || 'Pipeline error' });
+    }
+
+    await saveEnvelope(data);
+    res.json(data);
+    
+  } catch (err) {
+    res.status(502).json({ error: `Could not reach pipeline API: ${err.message}` });
+  }
 });
 
+
+// ── Start ────────────────────────────────────────────────────────────────────
+
 app.listen(PORT, () => {
-  console.log(`AWOM Dashboard → http://localhost:${PORT}`);
+  console.log(`AWOM Dashboard  → http://localhost:${PORT}`);
+  console.log(`Pipeline API    → ${API_BASE}`);
 });
