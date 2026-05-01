@@ -1,5 +1,530 @@
 [
   {
+    "envelope_id": "ENV-9BEE8C",
+    "raw_text": "My laptop screen has gone completely blank and won't respond. I have a deadline in 3 hours.",
+    "received_at": "2026-04-23T10:48:12.052562+00:00",
+    "errors": [],
+    "intake": {
+      "department": "IT",
+      "task_type": "equipment_failure",
+      "isAutonomous": false,
+      "reasoning": "The request involves a critical equipment failure that requires immediate attention, which is classified as a non-autonomous task.",
+      "confidence": 0.9,
+      "processed_at": "2026-04-23T10:48:12.944407+00:00"
+    },
+    "task": {
+      "task_id": "TASK-ADD54E",
+      "title": "Laptop Screen Failure",
+      "description": "My laptop screen has gone completely blank and won't respond. I have a deadline in 3 hours.",
+      "department": "IT",
+      "isAutonomous": false,
+      "task_type": "equipment_failure",
+      "requester_name": "unknown",
+      "stated_deadline": "3 hours",
+      "action_required": "Repair or replace the laptop",
+      "success_criteria": "Laptop screen is functioning and responsive",
+      "structured_at": "2026-04-23T10:48:16.841452+00:00"
+    },
+    "priority": {
+      "priority_score": 3,
+      "priority_label": "high",
+      "confidence": 0.991,
+      "model_version": "1.0.0",
+      "top_features_used": [],
+      "scored_at": "2026-04-23T10:48:19Z"
+    }
+  },
+  {
+    "envelope_id": "ENV-85DFF8",
+    "raw_text": "Finance \nDear Finance Team,\nI need an invoice for $18,500 from our logistics supplier approved by end of business today. They have explicitly warned us that if payment is not confirmed by then, they will suspend all shipments to our warehouse immediately. This will directly impact our operations and delay orders already committed to clients. Please treat this as a priority.\nRegards, Nour",
+    "received_at": "2026-04-23T10:45:41.999930+00:00",
+    "errors": [],
+    "intake": {
+      "department": "Finance",
+      "task_type": "invoice_approval",
+      "isAutonomous": false,
+      "reasoning": "The request requires manual approval and payment release for an invoice, which is classified as a non-autonomous task.",
+      "confidence": 0.9,
+      "processed_at": "2026-04-23T10:45:44.634586+00:00"
+    },
+    "task": {
+      "task_id": "TASK-691612",
+      "title": "Urgent Invoice Approval",
+      "description": "An invoice for $18,500 from the logistics supplier needs to be approved by the Finance Team. The supplier has warned that if payment is not confirmed by the end of business today, they will suspend all shipments to the warehouse, impacting operations and delaying orders.",
+      "department": "Finance",
+      "isAutonomous": false,
+      "task_type": "invoice_approval",
+      "requester_name": "Nour",
+      "stated_deadline": "end of business today",
+      "action_required": "Approve the invoice for $18,500",
+      "success_criteria": "Payment confirmation is received by the logistics supplier before the deadline",
+      "structured_at": "2026-04-23T10:45:51.710014+00:00"
+    },
+    "priority": {
+      "priority_score": 3,
+      "priority_label": "high",
+      "confidence": 0.995,
+      "model_version": "1.0.0",
+      "top_features_used": [],
+      "scored_at": "2026-04-23T10:45:58Z"
+    }
+  },
+  {
+    "envelope_id": "ENV-F7822E",
+    "raw_text": "Dear Finance Team,\n\nHi team, I was wondering if it would be possible to review the latest financial reports at your earliest convenience? I'd greatly appreciate it if we could discuss them this week, as it would help me move forward with some ongoing projects.\n\nThanks in advance for your time!\n\nBest regards,\nEmployee",
+    "received_at": "2026-04-23T08:21:11.015891+00:00",
+    "errors": [],
+    "intake": {
+      "department": "Finance",
+      "task_type": "budget_inquiry",
+      "isAutonomous": "false",
+      "reasoning": "The request requires a review of financial reports and a discussion with the Finance team, indicating a need for human interaction and judgment.",
+      "confidence": 0.8,
+      "processed_at": "2026-04-23T08:21:12.213111+00:00"
+    },
+    "task": {
+      "task_id": "TASK-72D353",
+      "title": "Financial Report Review",
+      "description": "The requester is asking the Finance Team to review the latest financial reports as soon as possible, in order to discuss them this week and help with ongoing projects.",
+      "department": "Finance",
+      "isAutonomous": "false",
+      "task_type": "budget_inquiry",
+      "requester_name": "Employee",
+      "stated_deadline": "this week",
+      "action_required": "Review the latest financial reports",
+      "success_criteria": "The financial reports have been reviewed and discussed with the requester",
+      "structured_at": "2026-04-23T08:21:17.629667+00:00"
+    },
+    "priority": {
+      "priority_score": 3,
+      "priority_label": "high",
+      "confidence": 0.99,
+      "model_version": "1.0.0",
+      "top_features_used": [],
+      "scored_at": "2026-04-23T08:21:18Z"
+    }
+  },
+  {
+    "envelope_id": "ENV-5A3741",
+    "raw_text": "Dear Sales Team,\n\nWe're on the verge of missing our quarterly targets and if we don't act NOW, we'll be facing a catastrophic failure in sales revenue! Every minute counts, and I expect immediate action from every team member to salvage what's left of this quarter.\n\nWe can't afford to lose any more ground!\n\nBest regards,\nVP",
+    "received_at": "2026-04-23T08:20:52.714111+00:00",
+    "errors": [],
+    "intake": {
+      "department": "Finance",
+      "task_type": "revenue_dispute",
+      "isAutonomous": false,
+      "reasoning": "The request is related to quarterly targets and sales revenue, which is a critical financial matter that requires manual intervention and decision-making.",
+      "confidence": 0.8,
+      "processed_at": "2026-04-23T08:20:53.629606+00:00"
+    },
+    "task": {
+      "task_id": "TASK-50EAF2",
+      "title": "Meet Quarterly Sales Targets",
+      "description": "The VP is urging the Sales Team to take immediate action to salvage the remaining quarter and prevent a catastrophic failure in sales revenue, as they are on the verge of missing their quarterly targets.",
+      "department": "Finance",
+      "isAutonomous": false,
+      "task_type": "revenue_dispute",
+      "requester_name": "VP",
+      "stated_deadline": "none stated",
+      "action_required": "Take immediate action to increase sales revenue.",
+      "success_criteria": "Quarterly sales targets are met or exceeded.",
+      "structured_at": "2026-04-23T08:20:56.979453+00:00"
+    },
+    "priority": {
+      "priority_score": 1,
+      "priority_label": "low",
+      "confidence": 0.998,
+      "model_version": "1.0.0",
+      "top_features_used": [],
+      "scored_at": "2026-04-23T08:20:59Z"
+    }
+  },
+  {
+    "envelope_id": "ENV-56C64C",
+    "raw_text": "Dear Operations Team,\n\nI need assistance with the Johnson account by Friday. Specifically, I require a detailed analysis of their supply chain and a proposal for optimization.\n\nTime is of the essence as we have a meeting scheduled with them next week. Please let me know if this is feasible.\n\nBest regards,\nVP",
+    "received_at": "2026-04-23T08:20:30.043021+00:00",
+    "errors": [],
+    "intake": {
+      "department": "Finance",
+      "task_type": "account_analysis",
+      "isAutonomous": false,
+      "reasoning": "The request requires a detailed analysis and proposal for a specific account, which involves human expertise and judgment, making it non-autonomous.",
+      "confidence": 0.8,
+      "processed_at": "2026-04-23T08:20:30.913134+00:00"
+    },
+    "task": {
+      "task_id": "TASK-FB7675",
+      "title": "Johnson Account Analysis",
+      "description": "Detailed analysis of Johnson account's supply chain and optimization proposal required",
+      "department": "Finance",
+      "isAutonomous": false,
+      "task_type": "account_analysis",
+      "requester_name": "VP",
+      "stated_deadline": "Friday",
+      "action_required": "Conduct a detailed analysis and propose optimization",
+      "success_criteria": "Completed analysis and proposal delivered to VP",
+      "structured_at": "2026-04-23T08:20:33.929785+00:00"
+    },
+    "priority": {
+      "priority_score": 2,
+      "priority_label": "medium",
+      "confidence": 0.999,
+      "model_version": "1.0.0",
+      "top_features_used": [],
+      "scored_at": "2026-04-23T08:20:35Z"
+    }
+  },
+  {
+    "envelope_id": "ENV-2D2468",
+    "raw_text": "Dear IT Team,\n\nThe server is down and everyone in the office is unable to access their files! We can't work like this! We need to get this fixed now or we'll fall seriously behind on our projects.\n\nI've tried to restart it but nothing's working. Please help!\n\nBest regards,\nEmployee",
+    "received_at": "2026-04-23T08:20:03.552499+00:00",
+    "errors": [],
+    "intake": {
+      "department": "IT",
+      "task_type": "server_outage",
+      "isAutonomous": false,
+      "reasoning": "The request is for immediate assistance with a critical server outage, which requires human intervention and is classified as a non-autonomous task.",
+      "confidence": 0.9,
+      "processed_at": "2026-04-23T08:20:04.263615+00:00"
+    },
+    "task": {
+      "task_id": "TASK-690C2C",
+      "title": "Server Down Emergency",
+      "description": "The server is down and everyone in the office is unable to access their files. The employee has tried to restart it but nothing's working and needs IT's help to get it fixed ASAP to avoid falling behind on projects.",
+      "department": "IT",
+      "isAutonomous": false,
+      "task_type": "server_outage",
+      "requester_name": "Employee",
+      "stated_deadline": "none stated",
+      "action_required": "Fix the server immediately.",
+      "success_criteria": "The server is back online and all employees can access their files.",
+      "structured_at": "2026-04-23T08:20:08.513565+00:00"
+    },
+    "priority": {
+      "priority_score": 4,
+      "priority_label": "critical",
+      "confidence": 0.495,
+      "model_version": "1.0.0",
+      "top_features_used": [],
+      "scored_at": "2026-04-23T08:20:11Z"
+    }
+  },
+  {
+    "envelope_id": "ENV-4B9606",
+    "raw_text": "Dear IT Team,\n\nGuys, our network is on the verge of collapse! If we don't upgrade ASAP, we'll be facing catastrophic consequences! I mean, think about all the sensitive data we're putting at risk every minute we delay.\n\nLet's get this done by the end of the week or we'll be in serious trouble!\n\nBest regards,\nDirector",
+    "received_at": "2026-04-23T08:19:22.300316+00:00",
+    "errors": [],
+    "intake": {
+      "department": "IT",
+      "task_type": "network_upgrade",
+      "isAutonomous": false,
+      "reasoning": "The request is for a network upgrade, which is not explicitly listed in the taxonomy, but it implies a critical failure or significant change, so it is classified as non-autonomous.",
+      "confidence": 0.8,
+      "processed_at": "2026-04-23T08:19:23.086591+00:00"
+    },
+    "task": {
+      "task_id": "TASK-ED51C8",
+      "title": "Network Upgrade Request",
+      "description": "The network is at risk of collapse and needs to be upgraded as soon as possible to prevent catastrophic consequences and protect sensitive data.",
+      "department": "IT",
+      "isAutonomous": false,
+      "task_type": "network_upgrade",
+      "requester_name": "Director",
+      "stated_deadline": "end of the week",
+      "action_required": "Upgrade the network immediately.",
+      "success_criteria": "Network upgrade completed and functioning properly.",
+      "structured_at": "2026-04-23T08:19:28.530998+00:00"
+    },
+    "priority": {
+      "priority_score": 3,
+      "priority_label": "high",
+      "confidence": 0.999,
+      "model_version": "1.0.0",
+      "top_features_used": [],
+      "scored_at": "2026-04-23T08:19:30Z"
+    }
+  },
+  {
+    "envelope_id": "ENV-BC203B",
+    "raw_text": "Dear IT Team,\n\nThe entire network is down and nobody can work!!! This is a disaster!! We need to get the servers back up immediately or we'll lose a whole day of productivity!!\n\nBest regards,\nManager",
+    "received_at": "2026-04-23T08:18:00.496175+00:00",
+    "errors": [],
+    "intake": {
+      "department": "IT",
+      "task_type": "server_outage",
+      "isAutonomous": false,
+      "reasoning": "The request is for immediate action to resolve a critical server outage, which requires human intervention and is classified as non-autonomous.",
+      "confidence": 0.9,
+      "processed_at": "2026-04-23T08:18:01.805141+00:00"
+    },
+    "task": {
+      "task_id": "TASK-F70D51",
+      "title": "Network Server Outage",
+      "description": "The entire network is down and nobody can work, causing a significant disruption to productivity. The servers need to be restored immediately to minimize losses.",
+      "department": "IT",
+      "isAutonomous": false,
+      "task_type": "server_outage",
+      "requester_name": "Manager",
+      "stated_deadline": "none stated",
+      "action_required": "Restore the servers to working order immediately.",
+      "success_criteria": "The network is back online and all employees can work without interruption.",
+      "structured_at": "2026-04-23T08:18:06.365599+00:00"
+    },
+    "priority": {
+      "priority_score": 3,
+      "priority_label": "high",
+      "confidence": 0.917,
+      "model_version": "1.0.0",
+      "top_features_used": [],
+      "scored_at": "2026-04-23T08:18:07Z"
+    }
+  },
+  {
+    "envelope_id": "ENV-83F334",
+    "raw_text": "Dear HR Team,\n\nOh no, the employee records system is DOWN!!! We cant access any employee files and its causing total chaos!! We need this fixed ASAP or we'll be in big trouble!!\n\nBest regards,\nIntern",
+    "received_at": "2026-04-23T08:17:27.618897+00:00",
+    "errors": [],
+    "intake": {
+      "department": "IT",
+      "task_type": "server_outage",
+      "isAutonomous": false,
+      "reasoning": "The request is about a server outage, which is a critical failure that requires immediate attention from the IT department.",
+      "confidence": 0.9,
+      "processed_at": "2026-04-23T08:17:28.523575+00:00"
+    },
+    "task": {
+      "task_id": "TASK-6203CE",
+      "title": "Employee Records System Down",
+      "description": "The employee records system is currently unavailable, causing chaos and disrupting access to employee files. The system needs to be restored as soon as possible to avoid further trouble.",
+      "department": "IT",
+      "isAutonomous": false,
+      "task_type": "server_outage",
+      "requester_name": "Intern",
+      "stated_deadline": "ASAP",
+      "action_required": "Fix the employee records system",
+      "success_criteria": "The employee records system is accessible and functional",
+      "structured_at": "2026-04-23T08:17:34.149545+00:00"
+    },
+    "priority": {
+      "priority_score": 3,
+      "priority_label": "high",
+      "confidence": 0.557,
+      "model_version": "1.0.0",
+      "top_features_used": [],
+      "scored_at": "2026-04-23T08:17:36Z"
+    }
+  },
+  {
+    "envelope_id": "ENV-0F3001",
+    "raw_text": "Dear Sales Team,\n\nWe're in the middle of a critical sales pitch and I just realized that our pipeline data is outdated. If we don't get the latest numbers, we're going to lose this deal and it's going to be a disaster!!!!!\n\nI need someone to drop everything and get me the updated pipeline numbers NOW so we can save this sale!!!!\n\nBest regards,\nVP",
+    "received_at": "2026-04-23T08:16:57.441119+00:00",
+    "errors": [],
+    "intake": {
+      "department": "Finance",
+      "task_type": "data_request",
+      "isAutonomous": false,
+      "reasoning": "The request is urgent and requires immediate attention from a team, indicating a need for manual intervention and decision-making.",
+      "confidence": 0.8,
+      "processed_at": "2026-04-23T08:16:58.435166+00:00"
+    },
+    "task": {
+      "task_id": "TASK-B52CC0",
+      "title": "Update Pipeline Numbers",
+      "description": "The VP needs the latest pipeline numbers to save a critical sales pitch, as the current data is outdated.",
+      "department": "Finance",
+      "isAutonomous": false,
+      "task_type": "data_request",
+      "requester_name": "VP",
+      "stated_deadline": "none stated",
+      "action_required": "Retrieve the updated pipeline numbers immediately.",
+      "success_criteria": "The VP receives the latest pipeline numbers to use in the sales pitch.",
+      "structured_at": "2026-04-23T08:17:01.887531+00:00"
+    },
+    "priority": {
+      "priority_score": 4,
+      "priority_label": "critical",
+      "confidence": 0.779,
+      "model_version": "1.0.0",
+      "top_features_used": [],
+      "scored_at": "2026-04-23T08:17:03Z"
+    }
+  },
+  {
+    "envelope_id": "ENV-0FCAB3",
+    "raw_text": "Hi ,\n\nI am currently preparing for upcoming tasks and wanted to confirm the allocated budget for my department.\nHaving this information will help ensure that expenses remain within the approved limits.\n\nCould you please share the updated budget details when available?\n\nThank you,",
+    "received_at": "2026-04-23T08:13:45.172814+00:00",
+    "errors": [],
+    "intake": {
+      "department": "Finance",
+      "task_type": "budget_inquiry",
+      "isAutonomous": "true",
+      "reasoning": "The request is for a budget inquiry, which is a task that can be handled autonomously by the finance department.",
+      "confidence": 0.9,
+      "processed_at": "2026-04-23T08:13:45.887004+00:00"
+    },
+    "task": {
+      "task_id": "TASK-00F477",
+      "title": "Budget Details Request",
+      "description": "The requester is preparing for upcoming tasks and needs to confirm the allocated budget for their department to ensure expenses remain within approved limits.",
+      "department": "Finance",
+      "isAutonomous": "true",
+      "task_type": "budget_inquiry",
+      "requester_name": "unknown",
+      "stated_deadline": "none stated",
+      "action_required": "Share the updated budget details.",
+      "success_criteria": "The requester receives the updated budget details for their department.",
+      "structured_at": "2026-04-23T08:13:51.486368+00:00"
+    },
+    "priority": {
+      "priority_score": 1,
+      "priority_label": "low",
+      "confidence": 0.999,
+      "model_version": "1.0.0",
+      "top_features_used": [],
+      "scored_at": "2026-04-23T08:13:53Z"
+    }
+  },
+  {
+    "envelope_id": "ENV-AC4C52",
+    "raw_text": "Dear IT Team,\n\nI am writing to inform you about a bug encountered in the client system earlier today.\nThe issue is causing delays in processing pending client requests, and it may impact delivery timelines if not resolved soon.\n\nPlease review this matter and let me know if additional details are required.\n\nBest regards,\nAli Abdallah",
+    "received_at": "2026-04-23T08:12:38.060499+00:00",
+    "errors": [],
+    "intake": {
+      "department": "IT",
+      "task_type": "bug_report",
+      "isAutonomous": false,
+      "reasoning": "The request requires review and potential action from the IT team to resolve a bug, indicating a non-autonomous task.",
+      "confidence": 0.9,
+      "processed_at": "2026-04-23T08:12:39.255296+00:00"
+    },
+    "task": {
+      "task_id": "TASK-6CB5A9",
+      "title": "Client System Bug Report",
+      "description": "A bug in the client system is causing delays in processing pending client requests and may impact delivery timelines if not resolved soon.",
+      "department": "IT",
+      "isAutonomous": false,
+      "task_type": "bug_report",
+      "requester_name": "Ali Abdallah",
+      "stated_deadline": "none stated",
+      "action_required": "Review and resolve the client system bug.",
+      "success_criteria": "The client system bug is resolved and pending client requests are processed without delays.",
+      "structured_at": "2026-04-23T08:12:41.055231+00:00"
+    },
+    "priority": {
+      "priority_score": 4,
+      "priority_label": "critical",
+      "confidence": 0.744,
+      "model_version": "1.0.0",
+      "top_features_used": [],
+      "scored_at": "2026-04-23T08:12:43Z"
+    }
+  },
+  {
+    "envelope_id": "ENV-381E17",
+    "raw_text": "Dear IT Team,\n\nI would like to report an issue with the server that appears to be currently unavailable.\nI have been unable to access shared files for some time now, and this is preventing me from completing my assigned tasks.\n\nCould you please check this issue when possible and advise on the expected resolution time?\n\nThank you,\nFatima Khaled",
+    "received_at": "2026-04-23T08:11:45.365770+00:00",
+    "errors": [],
+    "intake": {
+      "department": "IT",
+      "task_type": "server_outage",
+      "isAutonomous": false,
+      "reasoning": "The request is for assistance with a server outage, which is a critical failure requiring human intervention.",
+      "confidence": 0.9,
+      "processed_at": "2026-04-23T08:11:46.257647+00:00"
+    },
+    "task": {
+      "task_id": "TASK-A03004",
+      "title": "Server Unavailability Issue",
+      "description": "The server is currently unavailable, preventing access to shared files and hindering task completion.",
+      "department": "IT",
+      "isAutonomous": false,
+      "task_type": "server_outage",
+      "requester_name": "Fatima Khaled",
+      "stated_deadline": "none stated",
+      "action_required": "Investigate and resolve the server unavailability issue.",
+      "success_criteria": "The server is available and accessible, allowing users to access shared files.",
+      "structured_at": "2026-04-23T08:11:48.322776+00:00"
+    },
+    "priority": {
+      "priority_score": 4,
+      "priority_label": "critical",
+      "confidence": 0.689,
+      "model_version": "1.0.0",
+      "top_features_used": [],
+      "scored_at": "2026-04-23T08:11:50Z"
+    }
+  },
+  {
+    "envelope_id": "ENV-F65243",
+    "raw_text": "Dear Finance Department,\n\nI am writing to report an ongoing concern related to communication practices within our team.\nRecently, certain comments and behaviors during meetings have created an uncomfortable environment.\n\nThis issue has begun to impact my productivity and overall work experience.\n\nI would be grateful if this matter could be looked into and appropriate guidance provided.\n\nSincerely,\nAhmed Samer",
+    "received_at": "2026-04-23T08:10:14.445738+00:00",
+    "errors": [],
+    "intake": {
+      "department": "HR",
+      "task_type": "workplace_complaint",
+      "isAutonomous": false,
+      "reasoning": "The request is related to a workplace complaint and dispute, which requires human intervention and is not an autonomous task.",
+      "confidence": 0.9,
+      "processed_at": "2026-04-23T08:10:15.241042+00:00"
+    },
+    "task": {
+      "task_id": "TASK-AE3E95",
+      "title": "Workplace Communication Concern",
+      "description": "An employee is reporting uncomfortable comments and behaviors during meetings that are impacting their productivity and work experience.",
+      "department": "HR",
+      "isAutonomous": false,
+      "task_type": "workplace_complaint",
+      "requester_name": "Ahmed Samer",
+      "stated_deadline": "none stated",
+      "action_required": "Investigate the communication practices within the team and provide guidance.",
+      "success_criteria": "The employee reports an improvement in their work experience and productivity.",
+      "structured_at": "2026-04-23T08:10:17.991043+00:00"
+    },
+    "priority": {
+      "priority_score": 1,
+      "priority_label": "low",
+      "confidence": 0.999,
+      "model_version": "1.0.0",
+      "top_features_used": [],
+      "scored_at": "2026-04-23T08:10:19Z"
+    }
+  },
+  {
+    "envelope_id": "ENV-2325A3",
+    "raw_text": "Dear HR Department,\n\nI would like to bring to your attention a concern regarding my manager.\nOver the past few weeks, there have been remarks made during team meetings that I found inappropriate and unprofessional.\n\nThis situation has caused some discomfort and has affected my ability to focus fully during meetings.\n\nI would appreciate it if this matter could be reviewed when possible.\n\nSincerely,\nFatima Khaled",
+    "received_at": "2026-04-23T08:09:29.279160+00:00",
+    "errors": [],
+    "intake": {
+      "department": "HR",
+      "task_type": "workplace_complaint",
+      "isAutonomous": false,
+      "reasoning": "This request involves a workplace complaint and dispute, which requires human intervention and is not autonomous according to the taxonomy.",
+      "confidence": 0.9,
+      "processed_at": "2026-04-23T08:09:31.417016+00:00"
+    },
+    "task": {
+      "task_id": "TASK-6D64C0",
+      "title": "Manager's Inappropriate Remarks",
+      "description": "An employee is reporting inappropriate and unprofessional remarks made by their manager during team meetings, causing discomfort and affecting their ability to focus.",
+      "department": "HR",
+      "isAutonomous": false,
+      "task_type": "workplace_complaint",
+      "requester_name": "Fatima Khaled",
+      "stated_deadline": "none stated",
+      "action_required": "Review the complaint regarding the manager's behavior.",
+      "success_criteria": "The complaint is investigated and a resolution is provided to the employee.",
+      "structured_at": "2026-04-23T08:09:35.058339+00:00"
+    },
+    "priority": {
+      "priority_score": 1,
+      "priority_label": "low",
+      "confidence": 0.999,
+      "model_version": "1.0.0",
+      "top_features_used": [],
+      "scored_at": "2026-04-23T08:09:36Z"
+    }
+  },
+  {
     "envelope_id": "ENV-17B2CC",
     "raw_text": "Subject: Formal Workplace Complaint\n\nDear HR,\n\nI would like to file a formal complaint regarding my manager. \nOver the past few weeks, he has been making inappropriate remarks \nduring team meetings and creating a hostile work environment.\n\nThis situation has made me feel uncomfortable and stressed at work.\n\nI would appreciate if this matter could be reviewed as soon as possible.\n\nSincerely,\nFatima Khaled",
     "received_at": "2026-04-22T23:48:03.187110+00:00",
