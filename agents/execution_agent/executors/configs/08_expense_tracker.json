@@ -3,7 +3,7 @@
     "agent_version": "v1",
     "department": "Finance",
     "risk_tier": "medium",
-    "approval": "single_confirm_if_anomaly",
+    "approval": "none",
     "steps": [
         {
             "name": "extract_report_ref",

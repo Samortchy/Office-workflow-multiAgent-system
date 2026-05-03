@@ -1,0 +1,69 @@
+=====================================================================
+HR DEPARTMENT — ONBOARDING CHECKLIST
+=====================================================================
+Employee   : {{ employee_name | default('New Employee') }}
+Role       : {{ role | default('N/A') }}
+Start Date : {{ start_date | default(stated_deadline) }}
+Manager    : {{ manager_name | default('N/A') }}
+Reference  : {{ task_id }}
+=====================================================================
+
+Welcome to the HR department, {{ employee_name | default('team member') }}!
+This checklist will guide you through your first days. Your manager
+{{ manager_name | default('') }} will be your primary point of contact.
+
+---------------------------------------------------------------------
+WEEK 1 — ORIENTATION
+---------------------------------------------------------------------
+[ ] Collect your employee ID and access badge from reception
+[ ] Meet with {{ manager_name | default('your manager') }} for a 1:1 introduction
+[ ] Complete the mandatory HR onboarding forms (payroll, bank details, emergency contact)
+[ ] Review and sign the Employee Code of Conduct
+[ ] Complete the Workplace Health and Safety induction (online, ~30 min)
+[ ] Join the company-wide orientation session (check your calendar invite)
+
+---------------------------------------------------------------------
+SYSTEMS AND ACCESS
+---------------------------------------------------------------------
+{% if rows is defined and rows %}
+The following tools and systems will be provisioned for your role:
+
+{% for tool in rows %}
+  [ ] {{ tool.tool_name | default(tool.name | default(tool | string)) }}
+      {% if tool.description is defined %}  — {{ tool.description }}{% endif %}
+
+{% endfor %}
+{% else %}
+[ ] HR Information System (HRIS) — submit access request to IT
+[ ] Company email and calendar setup
+[ ] Document Management System (DMS) — HR shared drive access
+[ ] Payroll portal — for payslips and leave requests
+[ ] Learning Management System (LMS) — mandatory compliance training
+{% endif %}
+
+---------------------------------------------------------------------
+HR-SPECIFIC ONBOARDING TASKS
+---------------------------------------------------------------------
+[ ] Review the Leave Policy (annual leave, sick leave, public holidays)
+[ ] Review the Performance Management framework and review cycle dates
+[ ] Understand the grievance and disciplinary procedure
+[ ] Complete the GDPR and Data Protection training module
+[ ] Set up your employee self-service portal account
+[ ] Schedule a meeting with your HR Business Partner within your first week
+
+---------------------------------------------------------------------
+END OF FIRST MONTH
+---------------------------------------------------------------------
+[ ] Complete all mandatory compliance training (deadline: 30 days)
+[ ] Attend the New Joiner Welcome Session hosted by HR
+[ ] Submit your completed onboarding checklist to {{ manager_name | default('your manager') }}
+
+---------------------------------------------------------------------
+Key contacts:
+  HR Team         : hr@company.com
+  IT Helpdesk     : helpdesk@company.com  |  ext. 100
+  Your manager    : {{ manager_name | default('N/A') }}
+---------------------------------------------------------------------
+
+Generated automatically by the Office Workflow Automation System.
+Reference: {{ task_id }}

@@ -1,0 +1,23 @@
+{
+  "chunks": [
+    "chunk one text",
+    "chunk two text"
+  ],
+  "format": "txt",
+  "total_chunks": 2,
+  "summary": "Final summary: Q1 revenue up, expenses in budget.",
+  "chunk_count": 2,
+  "people": [
+    "Alice",
+    "Bob"
+  ],
+  "dates": [
+    "Q1 2026"
+  ],
+  "amounts": [
+    "12.4M EGP"
+  ],
+  "departments": [
+    "Finance"
+  ]
+}

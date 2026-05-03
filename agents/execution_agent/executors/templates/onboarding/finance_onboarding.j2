@@ -1,0 +1,72 @@
+=====================================================================
+FINANCE DEPARTMENT — ONBOARDING CHECKLIST
+=====================================================================
+Employee   : {{ employee_name | default('New Employee') }}
+Role       : {{ role | default('N/A') }}
+Start Date : {{ start_date | default(stated_deadline) }}
+Manager    : {{ manager_name | default('N/A') }}
+Reference  : {{ task_id }}
+=====================================================================
+
+Welcome to the Finance department, {{ employee_name | default('team member') }}!
+Please work through this checklist with your manager
+{{ manager_name | default('') }} during your first two weeks.
+
+---------------------------------------------------------------------
+WEEK 1 — ORIENTATION AND COMPLIANCE
+---------------------------------------------------------------------
+[ ] Collect employee ID and access badge from reception
+[ ] Meet {{ manager_name | default('your manager') }} — department structure walkthrough
+[ ] Review the Finance department's policies and procedures manual
+[ ] Complete mandatory Anti-Money Laundering (AML) training (online)
+[ ] Complete the Internal Controls and Audit Awareness module
+[ ] Sign the Conflict of Interest declaration form
+
+---------------------------------------------------------------------
+SYSTEMS AND ACCESS
+---------------------------------------------------------------------
+{% if rows is defined and rows %}
+Systems to be provisioned for your role:
+
+{% for tool in rows %}
+  [ ] {{ tool.tool_name | default(tool.name | default(tool | string)) }}
+      {% if tool.description is defined %}  — {{ tool.description }}{% endif %}
+
+{% endfor %}
+{% else %}
+[ ] Accounting / ERP system (e.g., SAP / Oracle) — submit IT access request
+[ ] Company email and shared Finance calendar
+[ ] Expense management platform
+[ ] Financial reporting dashboards (read access by default; write access upon manager approval)
+[ ] Document Management System — Finance shared drive
+[ ] Budget tracking and forecasting tools
+{% endif %}
+
+---------------------------------------------------------------------
+FINANCE-SPECIFIC ONBOARDING TASKS
+---------------------------------------------------------------------
+[ ] Understand the month-end and quarter-end close calendar
+[ ] Review chart of accounts and cost centre structure
+[ ] Familiarise yourself with the expense policy and approval thresholds
+[ ] Review the procurement and purchase order workflow
+[ ] Meet the external audit liaison contact
+[ ] Understand signatory limits and authorisation matrix for your role
+[ ] Complete a shadowed review of one complete financial reporting cycle
+
+---------------------------------------------------------------------
+END OF FIRST MONTH
+---------------------------------------------------------------------
+[ ] Complete all mandatory compliance training (deadline: 30 days)
+[ ] Conduct first expense report submission as a practice run
+[ ] Schedule monthly 1:1 with {{ manager_name | default('your manager') }}
+
+---------------------------------------------------------------------
+Key contacts:
+  Finance Team    : finance@company.com
+  IT Helpdesk     : helpdesk@company.com  |  ext. 100
+  Your manager    : {{ manager_name | default('N/A') }}
+  Payroll queries : payroll@company.com
+---------------------------------------------------------------------
+
+Generated automatically by the Office Workflow Automation System.
+Reference: {{ task_id }}

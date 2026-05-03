@@ -1,0 +1,47 @@
+Subject: Meeting Invitation — {{ topic | default(title) }}
+
+Dear {{ participant_names | default(requester_name) }},
+
+You are invited to a meeting scheduled by the Office Workflow Automation System
+on behalf of {{ requester_name }}.
+
+=====================================================================
+MEETING DETAILS — {{ task_id }}
+=====================================================================
+Topic       : {{ topic | default(title) }}
+Organised by: {{ requester_name }}
+Department  : {{ department }}
+=====================================================================
+
+{% if proposed_slots is defined and proposed_slots %}
+PROPOSED TIME SLOTS
+-------------------
+{% for slot in proposed_slots %}
+  Option {{ loop.index }}: {{ slot.slot_start }} — {{ slot.slot_end }}
+             Availability: {{ slot.free_count }}/{{ slot.total_count }} participants free
+             {% if slot.partial %}(Partial availability — {{ slot.busy_participants | join(', ') }} unavailable){% else %}(All participants available){% endif %}
+
+{% endfor %}
+The first available slot has been provisionally booked. Please confirm or
+suggest an alternative by replying to this invitation.
+{% else %}
+A time slot will be confirmed shortly. You will receive a calendar update
+once the scheduling is complete.
+{% endif %}
+
+AGENDA / PURPOSE
+----------------
+{{ description }}
+
+{% if action_required %}
+PREPARATION REQUIRED
+--------------------
+{{ action_required }}
+{% endif %}
+
+---------------------------------------------------------------------
+Please accept or decline this invitation at your earliest convenience.
+For scheduling changes, reply with reference {{ task_id }}.
+---------------------------------------------------------------------
+
+Office Automation System — Meeting Scheduler

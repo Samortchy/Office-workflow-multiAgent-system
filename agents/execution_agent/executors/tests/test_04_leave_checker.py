@@ -1,14 +1,56 @@
+"""
+Agent 04 — Leave Checker
+approval: none  |  on_failure: escalate
+
+No LLM calls needed: NLPExtractor resolves all fields without raw_text.
+DBExtractor returns empty rows (DB absent) — success.
+TemplateRenderer renders hr_reply.j2 (file exists, empty template) — success.
+EmailDispatcher runs in dry-run mode writing to output/emails/.
+Expected terminal status: "completed".
+"""
 from core.base_agent import ExecutionRunner
+
+_ENVELOPE = {
+    "intake": {
+        "department": "HR",
+        "task_type": "leave_check",
+        "isAutonomous": False,
+        "confidence": 0.95,
+        "processed_at": "2026-05-03T10:00:00Z",
+    },
+    "task": {
+        "task_id": "T004",
+        "title": "Check Annual Leave Balance",
+        "description": "Alice wants to know her remaining annual leave balance.",
+        "department": "HR",
+        "isAutonomous": False,
+        "task_type": "leave_check",
+        "requester_name": "alice@company.com",
+        "stated_deadline": "2026-05-04",
+        "action_required": "Return leave balance to requester",
+        "success_criteria": "Reply sent with leave balance info",
+        "structured_at": "2026-05-03T10:05:00Z",
+    },
+    "priority": {
+        "priority_score": 1,
+        "priority_label": "low",
+        "confidence": 0.95,
+        "model_version": "v1",
+        "top_features_used": [],
+        "scored_at": "2026-05-03T10:10:00Z",
+    },
+}
+
 
 def test_04_leave_checker():
     runner = ExecutionRunner("configs/04_leave_checker.json")
-    
-    envelope = {
-        "intake": {"department": "cross-dept", "task_type": "test", "isAutonomous": False, "confidence": 0.9, "processed_at": "2026-05-03T10:00:00Z"},
-        "task": {"task_id": "T004", "title": "Test Task", "description": "Test description", "department": "cross-dept", "isAutonomous": False, "task_type": "test", "requester_name": "John Doe", "stated_deadline": "2026-05-04", "action_required": "action", "success_criteria": "success", "structured_at": "2026-05-03T10:05:00Z"},
-        "priority": {"priority_score": 1, "priority_label": "low", "confidence": 0.95, "model_version": "v1", "top_features_used": [], "scored_at": "2026-05-03T10:10:00Z"}
-    }
-    
-    result = runner.execute(envelope)
+
+    result = runner.execute(_ENVELOPE.copy())
+
     assert "execution" in result
-    assert result["execution"]["agent_name"] == runner.config["agent_name"]
+    assert result["execution"]["agent_name"] == "leave_checker"
+    assert result["execution"]["status"] == "completed"
+    assert "extract_intent" in result["execution"]["steps"]
+    assert "fetch_leave_record" in result["execution"]["steps"]
+    assert "render_reply" in result["execution"]["steps"]
+    assert "send_reply" in result["execution"]["steps"]

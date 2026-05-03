@@ -1,0 +1,44 @@
+=====================================================================
+WEEKLY OPERATIONS REPORT
+=====================================================================
+Department  : {{ department }}
+Period      : {{ date_range  | default('This week') }}
+Report type : {{ report_type | default('weekly') }}
+Generated   : {{ scored_at   | default('N/A') }}
+Reference   : {{ task_id }}
+=====================================================================
+
+EXECUTIVE SUMMARY
+-----------------
+{% if report_content is defined and report_content %}
+{{ report_content }}
+{% else %}
+This weekly report covers operational activity for {{ department }} over the
+period {{ date_range | default('the current week') }}. Key highlights, blockers,
+and action items are listed below.
+{% endif %}
+
+{% if metrics is defined and metrics %}
+---------------------------------------------------------------------
+METRICS SNAPSHOT
+---------------------------------------------------------------------
+{% if metrics is iterable and metrics is not string %}
+{% for row in metrics %}
+{% for key, value in row.items() %}
+  {{ key | replace('_', ' ') | title }}: {{ value }}
+{% endfor %}
+---------------------------------------------------------------------
+{% endfor %}
+{% else %}
+{{ metrics }}
+{% endif %}
+{% endif %}
+
+---------------------------------------------------------------------
+NOTES
+---------------------------------------------------------------------
+This report was generated automatically by the Office Workflow Automation
+System based on available operational data. If you believe any figures are
+incorrect, contact the reporting team with reference {{ task_id }}.
+
+Prepared for : {{ requester_name }}

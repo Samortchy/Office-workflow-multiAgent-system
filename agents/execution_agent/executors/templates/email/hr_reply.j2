@@ -1,0 +1,41 @@
+Subject: Re: {{ title }}
+
+Dear {{ requester_name }},
+
+Thank you for reaching out to HR. We have looked up the leave record for
+{{ employee_name | default(requester_name) }} and are pleased to share the
+details below.
+
+{% if rows is defined and rows %}
+---------------------------------------------------------------------
+Leave Balance Summary
+---------------------------------------------------------------------
+{% for record in rows %}
+  Leave type   : {{ record.leave_type     | default('N/A') }}
+  Balance      : {{ record.balance_days   | default(record.remaining_days | default('N/A')) }} day(s) remaining
+  Used so far  : {{ record.used_days      | default('N/A') }} day(s)
+  Year         : {{ record.leave_year     | default('N/A') }}
+{% endfor %}
+---------------------------------------------------------------------
+{% else %}
+We were unable to locate a leave record matching your request. This may be
+because your record has not yet been set up in the system, or the leave type
+you requested is not on file.
+
+Please contact the HR team directly at hr@company.com so we can assist you
+further.
+{% endif %}
+
+{% if leave_type is defined and leave_type %}
+Requested leave type : {{ leave_type }}
+{% endif %}
+{% if date_range is defined and date_range %}
+Requested period     : {{ date_range }}
+{% endif %}
+
+If you have any questions or believe the balance shown is incorrect, please
+reply to this email or visit the HR portal. We are happy to review your record.
+
+Kind regards,
+HR Department — Office Automation System
+Reference: {{ task_id }}

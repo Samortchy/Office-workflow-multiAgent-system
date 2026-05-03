@@ -1,0 +1,69 @@
+=====================================================================
+INCIDENT REPORT
+=====================================================================
+Department  : {{ department }}
+Reported by : {{ requester_name }}
+Date filed  : {{ processed_at | default('N/A') }}
+Deadline    : {{ stated_deadline | default('N/A') }}
+Priority    : {{ priority_label | upper }}  (Score {{ priority_score }}/4)
+Reference   : {{ task_id }}
+=====================================================================
+
+⚠  This is an automatically generated incident report.
+   A human reviewer must verify and sign off before any corrective
+   action is taken.
+
+---------------------------------------------------------------------
+1. INCIDENT SUMMARY
+---------------------------------------------------------------------
+Title       : {{ title }}
+Description :
+{{ description }}
+
+---------------------------------------------------------------------
+2. IMPACT ASSESSMENT
+---------------------------------------------------------------------
+Priority    : {{ priority_label | upper }}
+Department  : {{ department }}
+Affected    : {{ requester_name }} (reporter)
+
+{% if priority_score >= 3 %}
+HIGH PRIORITY — This incident requires prompt attention.
+Response target: within 4 business hours.
+{% else %}
+Standard response target: within 1 business day.
+{% endif %}
+
+---------------------------------------------------------------------
+3. ACTION REQUIRED
+---------------------------------------------------------------------
+{{ action_required | default('Review the incident details and determine the appropriate response.') }}
+
+---------------------------------------------------------------------
+4. SUCCESS CRITERIA / RESOLUTION TARGET
+---------------------------------------------------------------------
+{{ success_criteria | default('Incident resolved and affected party notified.') }}
+
+---------------------------------------------------------------------
+5. GENERATED ANALYSIS
+---------------------------------------------------------------------
+{% if report_content is defined and report_content %}
+{{ report_content }}
+{% else %}
+Detailed analysis pending. A follow-up report will be issued once
+the incident has been investigated by the {{ department }} team.
+{% endif %}
+
+---------------------------------------------------------------------
+6. AUDIT TRAIL
+---------------------------------------------------------------------
+  Received at  : {{ received_at  | default('N/A') }}
+  Processed at : {{ processed_at | default('N/A') }}
+  Scored at    : {{ scored_at    | default('N/A') }}
+  Confidence   : {{ confidence   | default('N/A') }}
+  Reference    : {{ task_id }}
+
+This report was generated automatically by the Office Workflow Automation
+System and must be reviewed by an authorised member of {{ department }}
+before any action is taken.
+---------------------------------------------------------------------

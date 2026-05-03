@@ -1,0 +1,49 @@
+Subject: [ESCALATION] {{ priority_label | upper }} — {{ title }}
+
+Dear {{ reviewer_name | default('Reviewer') }},
+
+The following request has been automatically escalated to you for review.
+Please action this within the timeframe indicated below.
+
+=====================================================================
+ESCALATION BRIEF — {{ task_id }}
+=====================================================================
+From         : {{ requester_name }}
+Department   : {{ department }}
+Priority     : {{ priority_label | upper }}  (Score {{ priority_score }}/4)
+Deadline     : {{ stated_deadline | default('Not specified') }}
+=====================================================================
+
+TASK SUMMARY
+------------
+{{ title }}
+
+DESCRIPTION
+-----------
+{{ description }}
+
+ACTION REQUIRED
+---------------
+{{ action_required }}
+
+SUCCESS CRITERIA
+----------------
+{{ success_criteria }}
+
+{% if task_title is defined and task_title %}
+EXTRACTED TASK CONTEXT
+----------------------
+Identified title : {{ task_title }}
+{% endif %}
+
+---------------------------------------------------------------------
+This escalation was triggered automatically by the Office Workflow
+Automation System. No human has reviewed this request yet.
+
+Please respond to the requester ({{ requester_name }}) directly once
+you have assessed the situation.
+
+To reassign, visit the workflow portal and quote reference: {{ task_id }}
+---------------------------------------------------------------------
+
+Office Automation System — Escalation Router

@@ -1,0 +1,75 @@
+=====================================================================
+IT DEPARTMENT — ONBOARDING CHECKLIST
+=====================================================================
+Employee   : {{ employee_name | default('New Employee') }}
+Role       : {{ role | default('N/A') }}
+Start Date : {{ start_date | default(stated_deadline) }}
+Manager    : {{ manager_name | default('N/A') }}
+Reference  : {{ task_id }}
+=====================================================================
+
+Welcome to the IT department, {{ employee_name | default('team member') }}!
+Your manager {{ manager_name | default('') }} will walk you through the
+technical environment during your first week.
+
+---------------------------------------------------------------------
+DAY 1 — EQUIPMENT AND ACCESS SETUP
+---------------------------------------------------------------------
+[ ] Collect your workstation / laptop from IT (pre-configured — check asset tag)
+[ ] Connect to the corporate network (wired preferred on Day 1; Wi-Fi credentials in your welcome email)
+[ ] Set up multi-factor authentication (MFA) on your phone for all corporate accounts
+[ ] Activate your company email: {{ requester_name | lower | replace(' ', '.') }}@company.com
+[ ] Change all temporary passwords immediately (IT security policy)
+
+---------------------------------------------------------------------
+SYSTEMS AND TOOLS TO PROVISION
+---------------------------------------------------------------------
+{% if rows is defined and rows %}
+The following tools will be set up for your role by the IT provisioning team:
+
+{% for tool in rows %}
+  [ ] {{ tool.tool_name | default(tool.name | default(tool | string)) }}
+      {% if tool.description is defined %}  — {{ tool.description }}{% endif %}
+
+{% endfor %}
+{% else %}
+[ ] Source control (Git / GitHub / GitLab) — generate SSH key and register
+[ ] Development IDE (VS Code / PyCharm / JetBrains suite)
+[ ] CI/CD platform access (Jenkins / GitHub Actions)
+[ ] Cloud console access (AWS / Azure / GCP) — least-privilege role
+[ ] Internal wiki and documentation platform (Confluence / Notion)
+[ ] Monitoring and alerting dashboards (Grafana / Datadog)
+[ ] VPN client — mandatory for remote work
+[ ] Password manager (company-provided)
+[ ] Ticket and project management (Jira / Linear)
+{% endif %}
+
+---------------------------------------------------------------------
+WEEK 1 — TECHNICAL ORIENTATION
+---------------------------------------------------------------------
+[ ] Shadow a team member through one end-to-end deployment cycle
+[ ] Review the IT security policy and acceptable use policy
+[ ] Complete the Cybersecurity Awareness training module (mandatory, ~1 hr)
+[ ] Join the on-call rotation briefing — understand escalation paths
+[ ] Review the incident response playbook
+[ ] Familiarise yourself with the internal architecture diagram (ask manager for access)
+[ ] Set up your local development environment following the team runbook
+
+---------------------------------------------------------------------
+END OF FIRST MONTH
+---------------------------------------------------------------------
+[ ] Complete all mandatory compliance and security training (deadline: 30 days)
+[ ] Complete your first independent ticket or task (logged in the ticketing system)
+[ ] Conduct code review for at least one peer pull request
+[ ] Meet with {{ manager_name | default('your manager') }} for 30-day check-in
+
+---------------------------------------------------------------------
+Key contacts:
+  IT Helpdesk     : helpdesk@company.com  |  ext. 100
+  Your manager    : {{ manager_name | default('N/A') }}
+  Security team   : security@company.com
+  DevOps lead     : devops@company.com
+---------------------------------------------------------------------
+
+Generated automatically by the Office Workflow Automation System.
+Reference: {{ task_id }}

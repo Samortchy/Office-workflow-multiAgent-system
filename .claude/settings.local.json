@@ -12,7 +12,9 @@
       "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\simom\\\\Agentic-Workflow-Operations-Manager\\\\agents\\\\execution_agent\\\\executors\\\\steps\\\\dispatchers\\\\\" | ForEach-Object { \"$\\($_.Name\\): $\\($_.Length\\) bytes\" })",
       "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\simom\\\\Agentic-Workflow-Operations-Manager\\\\agents\\\\execution_agent\\\\executors\\\\steps\\\\custom\\\\\" | ForEach-Object { \"$\\($_.Name\\): $\\($_.Length\\) bytes\" })",
       "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\simom\\\\Agentic-Workflow-Operations-Manager\\\\agents\\\\execution_agent\\\\executors\\\\steps\\\\\" | Where-Object { $_.Name -eq \"base_step.py\" } | ForEach-Object { \"$\\($_.Name\\): $\\($_.Length\\) bytes\" })",
-      "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\simom\\\\Agentic-Workflow-Operations-Manager\\\\agents\\\\execution_agent\\\\executors\\\\templates\\\\\" -Recurse | ForEach-Object { if \\(-not $_.PSIsContainer\\) { \"$\\($_.FullName | Split-Path -Leaf\\): $\\($_.Length\\) bytes\" } })"
+      "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\simom\\\\Agentic-Workflow-Operations-Manager\\\\agents\\\\execution_agent\\\\executors\\\\templates\\\\\" -Recurse | ForEach-Object { if \\(-not $_.PSIsContainer\\) { \"$\\($_.FullName | Split-Path -Leaf\\): $\\($_.Length\\) bytes\" } })",
+      "PowerShell(python -c \"import fpdf; print\\('fpdf2 ok'\\)\" 2>&1; python -c \"import reportlab; print\\('reportlab ok'\\)\" 2>&1)",
+      "PowerShell(pip install *)"
     ]
   }
 }

@@ -1,0 +1,39 @@
+Subject: Re: {{ title }} [{{ task_id }}]
+
+Hi {{ requester_name }},
+
+Thanks for reaching out to IT Support. Here is an update on your request.
+
+---------------------------------------------------------------------
+Ticket  : {{ task_id }}
+Issue   : {{ title }}
+Status  : In Progress
+Priority: {{ priority_label | upper }}
+---------------------------------------------------------------------
+
+{% if draft_email_reply is defined and draft_email_reply %}
+{{ draft_email_reply }}
+{% elif rendered is defined and rendered %}
+{{ rendered }}
+{% else %}
+We have received your request and our team is working on it. Based on the
+details provided:
+
+  {{ description }}
+
+Recommended next steps:
+  1. {{ action_required }}
+
+Expected outcome:
+  {{ success_criteria }}
+
+If you need immediate assistance or your issue is blocking critical work,
+please call the IT helpdesk at ext. 100 or email helpdesk@company.com with
+the ticket number above.
+{% endif %}
+
+---------------------------------------------------------------------
+Need more help? Reply to this email with ticket {{ task_id }} in the subject.
+---------------------------------------------------------------------
+
+IT Support — Office Automation System
