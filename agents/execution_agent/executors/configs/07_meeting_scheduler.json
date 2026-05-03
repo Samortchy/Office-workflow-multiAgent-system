@@ -1,0 +1,51 @@
+{
+    "agent_name": "meeting_scheduler",
+    "agent_version": "v1",
+    "department": "cross-dept",
+    "risk_tier": "medium",
+    "approval": "single_confirm",
+    "steps": [
+        {
+            "name": "extract_participants",
+            "type": "extractor",
+            "class": "NLPExtractor",
+            "config": {
+                "fields_to_extract": [
+                    "participant_names",
+                    "participant_emails",
+                    "preferred_duration",
+                    "topic"
+                ]
+            }
+        },
+        {
+            "name": "fetch_availability",
+            "type": "extractor",
+            "class": "DBExtractor",
+            "config": {
+                "service": "calendar_api",
+                "look_ahead_days": 5
+            }
+        },
+        {
+            "name": "rank_slots",
+            "type": "custom",
+            "class": "SlotRanker",
+            "config": {
+                "max_proposals": 3,
+                "scoring": "participant_overlap"
+            }
+        },
+        {
+            "name": "send_invite",
+            "type": "dispatcher",
+            "class": "CalendarDispatcher",
+            "config": {
+                "monitor_rsvp": true,
+                "template": "templates/email/meeting_invite.j2"
+            }
+        }
+    ],
+    "on_failure": "escalate",
+    "outcome_signal": true
+}

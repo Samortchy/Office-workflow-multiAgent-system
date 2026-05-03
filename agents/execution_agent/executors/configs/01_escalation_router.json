@@ -1,0 +1,52 @@
+{
+    "agent_name": "escalation_router",
+    "agent_version": "v1",
+    "department": "cross-dept",
+    "risk_tier": "low",
+    "approval": "none",
+    "steps": [
+        {
+            "name": "extract_task_context",
+            "type": "extractor",
+            "class": "NLPExtractor",
+            "config": {
+                "fields_to_extract": [
+                    "department",
+                    "priority_score",
+                    "requester_name",
+                    "task_title"
+                ]
+            }
+        },
+        {
+            "name": "select_reviewer",
+            "type": "processor",
+            "class": "DBFetcher",
+            "config": {
+                "table": "routing_table",
+                "match_on": [
+                    "department",
+                    "priority_label"
+                ]
+            }
+        },
+        {
+            "name": "render_brief",
+            "type": "processor",
+            "class": "TemplateRenderer",
+            "config": {
+                "template": "templates/email/escalation_brief.j2"
+            }
+        },
+        {
+            "name": "send_brief",
+            "type": "dispatcher",
+            "class": "EmailDispatcher",
+            "config": {
+                "recipient_field": "execution.steps.select_reviewer.data.reviewer_email"
+            }
+        }
+    ],
+    "on_failure": "log_and_alert",
+    "outcome_signal": true
+}

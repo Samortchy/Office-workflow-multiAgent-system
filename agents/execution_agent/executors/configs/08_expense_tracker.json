@@ -1,0 +1,51 @@
+{
+    "agent_name": "expense_tracker",
+    "agent_version": "v1",
+    "department": "Finance",
+    "risk_tier": "medium",
+    "approval": "single_confirm_if_anomaly",
+    "steps": [
+        {
+            "name": "extract_report_ref",
+            "type": "extractor",
+            "class": "NLPExtractor",
+            "config": {
+                "fields_to_extract": [
+                    "report_id",
+                    "employee_name",
+                    "date_range"
+                ]
+            }
+        },
+        {
+            "name": "fetch_expense_record",
+            "type": "extractor",
+            "class": "DBExtractor",
+            "config": {
+                "table": "finance_expense_reports",
+                "access": "read_only"
+            }
+        },
+        {
+            "name": "check_anomalies",
+            "type": "custom",
+            "class": "AnomalyChecker",
+            "config": {
+                "duplicate_window_days": 30,
+                "receipt_threshold_egp": 500,
+                "on_anomaly": "escalate_to_finance_team"
+            }
+        },
+        {
+            "name": "send_status_reply",
+            "type": "dispatcher",
+            "class": "EmailDispatcher",
+            "config": {
+                "recipient_field": "task.requester_name",
+                "run_if": "execution.steps.check_anomalies.data.anomaly == false"
+            }
+        }
+    ],
+    "on_failure": "escalate",
+    "outcome_signal": true
+}

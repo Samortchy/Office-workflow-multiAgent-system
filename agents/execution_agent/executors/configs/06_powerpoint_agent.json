@@ -1,0 +1,55 @@
+{
+    "agent_name": "powerpoint_agent",
+    "agent_version": "v1",
+    "department": "cross-dept",
+    "risk_tier": "medium",
+    "approval": "single_confirm",
+    "steps": [
+        {
+            "name": "select_template",
+            "type": "processor",
+            "class": "DBFetcher",
+            "config": {
+                "table": "templates/pptx/templates_meta.json",
+                "match_on": [
+                    "task_type"
+                ]
+            }
+        },
+        {
+            "name": "generate_slide_json",
+            "type": "processor",
+            "class": "LLMGenerator",
+            "config": {
+                "prompt_template": "generate_slides",
+                "temperature": 0.4,
+                "required_fields": [
+                    "audience",
+                    "purpose",
+                    "key_message"
+                ],
+                "pause_if_missing": true
+            }
+        },
+        {
+            "name": "write_pptx",
+            "type": "custom",
+            "class": "PPTXWriter",
+            "config": {
+                "output_dir": "output/presentations",
+                "naming": "{task_id}_{date}_{short_title}.pptx"
+            }
+        },
+        {
+            "name": "email_file",
+            "type": "dispatcher",
+            "class": "EmailDispatcher",
+            "config": {
+                "recipient_field": "task.requester_name",
+                "attach_field": "execution.steps.write_pptx.data.output_path"
+            }
+        }
+    ],
+    "on_failure": "escalate",
+    "outcome_signal": true
+}

@@ -1,0 +1,65 @@
+{
+    "agent_name": "onboarding_coordinator",
+    "agent_version": "v1",
+    "department": "HR",
+    "risk_tier": "medium",
+    "approval": "manager_sign_off",
+    "steps": [
+        {
+            "name": "extract_employee_details",
+            "type": "extractor",
+            "class": "NLPExtractor",
+            "config": {
+                "fields_to_extract": [
+                    "employee_name",
+                    "start_date",
+                    "role",
+                    "department",
+                    "manager_name"
+                ]
+            }
+        },
+        {
+            "name": "fetch_tooling_list",
+            "type": "extractor",
+            "class": "DBExtractor",
+            "config": {
+                "table": "tooling_list",
+                "match_on": [
+                    "department"
+                ]
+            }
+        },
+        {
+            "name": "generate_checklist",
+            "type": "processor",
+            "class": "TemplateRenderer",
+            "config": {
+                "template": "templates/onboarding/{department}_onboarding.j2",
+                "output_format": "pdf"
+            }
+        },
+        {
+            "name": "inject_access_tasks",
+            "type": "custom",
+            "class": "QueueInjector",
+            "config": {
+                "target_agent": "account_manager",
+                "task_type": "access_provisioning",
+                "one_task_per_tool": true
+            }
+        },
+        {
+            "name": "send_welcome_email",
+            "type": "dispatcher",
+            "class": "EmailDispatcher",
+            "config": {
+                "recipient_field": "execution.steps.extract_employee_details.data.employee_email",
+                "require_approval": true,
+                "attach_checklist": true
+            }
+        }
+    ],
+    "on_failure": "escalate",
+    "outcome_signal": true
+}

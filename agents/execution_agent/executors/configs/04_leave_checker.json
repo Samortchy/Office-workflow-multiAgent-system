@@ -1,0 +1,51 @@
+{
+    "agent_name": "leave_checker",
+    "agent_version": "v1",
+    "department": "HR",
+    "risk_tier": "low",
+    "approval": "none",
+    "steps": [
+        {
+            "name": "extract_intent",
+            "type": "extractor",
+            "class": "NLPExtractor",
+            "config": {
+                "fields_to_extract": [
+                    "employee_name",
+                    "leave_type",
+                    "date_range"
+                ]
+            }
+        },
+        {
+            "name": "fetch_leave_record",
+            "type": "extractor",
+            "class": "DBExtractor",
+            "config": {
+                "table": "hr_leave_balances",
+                "match_on": [
+                    "employee_name",
+                    "leave_type"
+                ]
+            }
+        },
+        {
+            "name": "render_reply",
+            "type": "processor",
+            "class": "TemplateRenderer",
+            "config": {
+                "template": "templates/email/hr_reply.j2"
+            }
+        },
+        {
+            "name": "send_reply",
+            "type": "dispatcher",
+            "class": "EmailDispatcher",
+            "config": {
+                "recipient_field": "task.requester_name"
+            }
+        }
+    ],
+    "on_failure": "escalate",
+    "outcome_signal": true
+}
